@@ -4,11 +4,14 @@ services:
     image: mysql:8.2
     command: --default-authentication-plugin=caching_sha2_password
     environment:
-      MYSQL_ROOT_PASSWORD: "password"
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=pokedraft
+      - MYSQL_USER=aloan93
+      - MYSQL_PASSWORD=aloan93
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3307:3306/tcp"
     restart: always
 
   adminer:
