@@ -1,5 +1,27 @@
 {
   "GET /api": {
     "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/users": {
+    "description": "serves an object with a key of 'total' that represents all retrieved users as an integer, and 'users' that represents all user objects in an array",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": {
+      "total": 2,
+      "users": [
+        {
+          "user_id": 1,
+          "username": "testuser1",
+          "email": "test1@test.com",
+          "created_at": "2020-01-01T12:00:00.000Z"
+        },
+        {
+          "user_id": 2,
+          "username": "testuser2",
+          "email": "test2@test.com",
+          "created_at": "2020-02-14T12:00:00.000Z"
+        }
+      ]
+    }
   }
 }
