@@ -1,13 +1,15 @@
-const { fetchUsers, fetchUserByUserId } = require("../models/users.models");
+const {
+  fetchUsers,
+  fetchUserByUserId,
+  createUser,
+} = require("../models/users.models");
 
 exports.getUsers = (req, res, next) => {
   return fetchUsers()
     .then(({ total, users }) => {
       res.status(200).send({ total, users });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 exports.getUserByUserId = (req, res, next) => {
@@ -16,7 +18,14 @@ exports.getUserByUserId = (req, res, next) => {
     .then((user) => {
       res.status(200).send({ user });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
+};
+
+exports.postUser = (req, res, next) => {
+  const { username, email } = req.body;
+  return createUser(username, email)
+    .then((user) => {
+      res.status(201).send({ user });
+    })
+    .catch((err) => next(err));
 };

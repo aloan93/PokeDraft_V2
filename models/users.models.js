@@ -16,3 +16,19 @@ exports.fetchUserByUserId = (user_id) => {
       return result[0][0];
     });
 };
+
+exports.createUser = (username, email) => {
+  return database
+    .query(`INSERT INTO users (username, email) VALUES (?, ?);`, [
+      username,
+      email,
+    ])
+    .then(() => {
+      return database.query(
+        `SELECT * FROM users WHERE user_id = LAST_INSERT_ID()`
+      );
+    })
+    .then((result) => {
+      return result[0][0];
+    });
+};
