@@ -36,5 +36,27 @@
         "created_at": "2020-01-01T12:00:00.000Z"
       }
     }
+  },
+  "GET /api/leagues": {
+    "description": "serves an object with a key of 'total' that represents all retrieved leagues as an integer, and 'leagues' that represents all league objects in an array",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": {
+      "total": 2,
+      "users": [
+        {
+          "league_id": 1,
+          "league_name": "testleague1",
+          "owner": 1,
+          "notes": "this is a test note"
+        },
+        {
+          "league_id": 2,
+          "league_name": "testleague2",
+          "owner": 3,
+          "notes": null
+        }
+      ]
+    }
   }
 }
