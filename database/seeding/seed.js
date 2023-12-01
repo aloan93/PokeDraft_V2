@@ -23,6 +23,7 @@ const seed = () => {
         league_name VARCHAR(50) NOT NULL UNIQUE,
         owner BIGINT UNSIGNED NOT NULL,
         notes VARCHAR(1000),
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (league_id),
         FOREIGN KEY (owner)
             REFERENCES users(user_id)
