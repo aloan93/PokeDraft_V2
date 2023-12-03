@@ -36,3 +36,18 @@ exports.createUser = (username, email, password) => {
       return result[0][0];
     });
 };
+
+exports.createUserLogin = (username, password) => {
+  return database
+    .query(`SELECT password FROM users WHERE username = ?;`, [username])
+    .then((result) => {
+      if (result[0].length === 0) {
+        return Promise.reject({ status: 404, message: "User not found" });
+      }
+      return bcrypt.compare(password, result[0][0].password);
+    })
+    .then((isMatch) => {
+      if (!isMatch) return { status: 401, message: "Password is incorrect" };
+      else return { status: 200, message: "Successfully logged in" };
+    });
+};
