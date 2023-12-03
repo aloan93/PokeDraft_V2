@@ -67,4 +67,57 @@ exports.updateUserByUserId = (
   email,
   password,
   avatar_url
-) => {};
+) => {
+  if (!username && !email && !password && !avatar_url) {
+    return Promise.reject({
+      status: 400,
+      message: "At least one field must be selected for update",
+    });
+  }
+
+  return this.checkUserExists(user_id)
+    .then(() => {
+      if (password) return bcrypt.hash(password, 10);
+      else return;
+    })
+    .then((hashedPassword) => {
+      let query = `UPDATE users SET`;
+      const queryValues = [];
+      let count = 0;
+
+      if (username) {
+        queryValues.push(username);
+        query += ` username = ?`;
+        count++;
+      }
+
+      if (email) {
+        queryValues.push(email);
+        if (count === 0) query += ` email = ?`;
+        else query += `, email = ?`;
+        count++;
+      }
+
+      if (hashedPassword) {
+        queryValues.push(hashedPassword);
+        if (count === 0) query += ` password = ?`;
+        else query += `, password =?`;
+        count++;
+      }
+
+      if (avatar_url) {
+        queryValues.push(avatar_url);
+        if (count === 0) query += ` avatar_url = ?`;
+        else query += `, avatar_url =?`;
+      }
+
+      query += ` WHERE user_id = ?;`;
+      queryValues.push(user_id);
+
+      return database.query(query, queryValues);
+    })
+    .then(() => {
+      return this.fetchUserByUserId(user_id);
+    })
+    .then((user) => user);
+};
