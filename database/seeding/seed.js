@@ -12,6 +12,8 @@ const seed = () => {
         user_id SERIAL NOT NULL,
         username VARCHAR(20) NOT NULL UNIQUE,
         email VARCHAR(319) NOT NULL UNIQUE,
+        password VARCHAR(72) NOT NULL,
+        avatar_url VARCHAR(1000) DEFAULT "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
         join_date DATETIME DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id)
         )`);

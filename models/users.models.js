@@ -1,4 +1,5 @@
 const database = require("../database/connection");
+const bcrypt = require("bcrypt");
 
 exports.fetchUsers = () => {
   return database.query(`SELECT * FROM users`).then((result) => {
@@ -17,12 +18,15 @@ exports.fetchUserByUserId = (user_id) => {
     });
 };
 
-exports.createUser = (username, email) => {
-  return database
-    .query(`INSERT INTO users (username, email) VALUES (?, ?);`, [
-      username,
-      email,
-    ])
+exports.createUser = (username, email, password) => {
+  return bcrypt
+    .hash(password, 10)
+    .then((hashedPassword) => {
+      return database.query(
+        `INSERT INTO users (username, email, password) VALUES (?, ?, ?);`,
+        [username, email, hashedPassword]
+      );
+    })
     .then(() => {
       return database.query(
         `SELECT * FROM users WHERE user_id = LAST_INSERT_ID()`

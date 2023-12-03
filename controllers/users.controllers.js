@@ -22,8 +22,8 @@ exports.getUserByUserId = (req, res, next) => {
 };
 
 exports.postUser = (req, res, next) => {
-  const { username, email } = req.body;
-  return createUser(username, email)
+  const { username, email, password } = req.body;
+  return createUser(username, email, password)
     .then((user) => {
       res.status(201).send({ user });
     })
