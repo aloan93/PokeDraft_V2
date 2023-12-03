@@ -13,13 +13,17 @@
           "user_id": 1,
           "username": "testuser1",
           "email": "test1@test.com",
-          "created_at": "2020-01-01T12:00:00.000Z"
+          "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
+          "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
+          "join_date": "2020-01-01T12:00:00.000Z"
         },
         {
           "user_id": 2,
           "username": "testuser2",
           "email": "test2@test.com",
-          "created_at": "2020-02-14T12:00:00.000Z"
+          "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
+          "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
+          "join_date": "2020-02-14T12:00:00.000Z"
         }
       ]
     }
@@ -33,7 +37,9 @@
         "user_id": 1,
         "username": "testuser1",
         "email": "test1@test.com",
-        "created_at": "2020-01-01T12:00:00.000Z"
+        "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
+        "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
+        "join_date": "2020-01-01T12:00:00.000Z"
       }
     }
   },
@@ -73,6 +79,39 @@
         "notes": null,
         "created_at": "2020-01-01T12:00:00.000Z"
       }
+    }
+  },
+  "POST /api/users": {
+    "description": "posts a new user and serves that user as an object on the key of 'user'. Takes 3 mandatory properties of 'username', 'email' and 'password'",
+    "queries": [],
+    "exampleInput": {
+      "username": "testuser1",
+      "email": "test1@test.com",
+      "password": "securepassword"
+    },
+    "exampleResponse": {
+      "user": {
+        "user_id": 1,
+        "username": "testuser1",
+        "email": "test1@test.com",
+        "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
+        "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
+        "join_date": "2020-01-01T12:00:00.000Z"
+      }
+    }
+  },
+  "POST /api/users/login": {
+    "description": "Takes 2 mandatory properties of 'username' and 'password', and serves a message either to authorise or deny a login attempt based on the provided password matching the provided user's password",
+    "queries": [],
+    "exampleInput": {
+      "username": "testuser1",
+      "password": "securepassword"
+    },
+    "exampleResponse": {
+      "message": "Successfully logged in"
+    },
+    "exampleResponse2": {
+      "message": "Password is incorrect"
     }
   }
 }
