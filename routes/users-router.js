@@ -5,6 +5,7 @@ const {
   postUser,
   postUserLogin,
   patchUserByUserId,
+  deleteUserByUserId,
 } = require("../controllers/users.controllers");
 
 usersRouter.get("/", getUsers);
@@ -16,5 +17,7 @@ usersRouter.post("/", postUser);
 usersRouter.post("/login", postUserLogin);
 
 usersRouter.patch("/:user_id", patchUserByUserId);
+
+usersRouter.delete("/:user_id", deleteUserByUserId);
 
 module.exports = { usersRouter };

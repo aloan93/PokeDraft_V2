@@ -121,3 +121,15 @@ exports.updateUserByUserId = (
     })
     .then((user) => user);
 };
+
+exports.removeUserByUserId = (user_id) => {
+  const query = database.query(`DELETE FROM users WHERE user_id = ?;`, [
+    user_id,
+  ]);
+  const doesUserExist = this.checkUserExists(user_id);
+  return Promise.all([query, doesUserExist]).then((results) => {
+    if (results[0][0].affectedRows === 0) {
+      return Promise.reject({ status: 500, message: "Issue deleting user" });
+    } else return;
+  });
+};

@@ -4,6 +4,7 @@ const {
   createUser,
   createUserLogin,
   updateUserByUserId,
+  removeUserByUserId,
 } = require("../models/users.models");
 
 exports.getUsers = (req, res, next) => {
@@ -47,6 +48,15 @@ exports.patchUserByUserId = (req, res, next) => {
   return updateUserByUserId(user_id, username, email, password, avatar_url)
     .then((user) => {
       res.status(200).send({ user });
+    })
+    .catch((err) => next(err));
+};
+
+exports.deleteUserByUserId = (req, res, next) => {
+  const { user_id } = req.params;
+  return removeUserByUserId(user_id)
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch((err) => next(err));
 };
