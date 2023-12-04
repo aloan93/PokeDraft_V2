@@ -43,44 +43,6 @@
       }
     }
   },
-  "GET /api/leagues": {
-    "description": "serves an object with a key of 'total' that represents all retrieved leagues as an integer, and 'leagues' that represents all league objects in an array",
-    "queries": [],
-    "exampleInput": {},
-    "exampleResponse": {
-      "total": 2,
-      "users": [
-        {
-          "league_id": 1,
-          "league_name": "testleague1",
-          "owner": 1,
-          "notes": "this is a test note",
-          "created_at": "2020-01-01T12:00:00.000Z"
-        },
-        {
-          "league_id": 2,
-          "league_name": "testleague2",
-          "owner": 3,
-          "notes": null,
-          "created_at": "2020-01-01T12:00:00.000Z"
-        }
-      ]
-    }
-  },
-  "GET /api/leagues/:league_id": {
-    "description": "serves an the requested league as an object on the key of 'league'",
-    "queries": [],
-    "exampleInput": {},
-    "exampleResponse": {
-      "league": {
-        "league_id": 2,
-        "league_name": "testleague2",
-        "owner": 3,
-        "notes": null,
-        "created_at": "2020-01-01T12:00:00.000Z"
-      }
-    }
-  },
   "POST /api/users": {
     "description": "posts a new user and serves that user as an object on the key of 'user'. Takes 3 mandatory properties of 'username', 'email' and 'password'",
     "queries": [],
@@ -131,6 +93,50 @@
         "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
         "avatar_url": "https://patched.com/new_image.png",
         "join_date": "2020-01-01T12:00:00.000Z"
+      }
+    }
+  },
+  "DELETE /api/users/:user_id": {
+    "description": "deletes the selected user via 'user_id'. deleting a user will cascade down and delete any children in other data tables (eg. 'leagues')",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": null
+  },
+  "GET /api/leagues": {
+    "description": "serves an object with a key of 'total' that represents all retrieved leagues as an integer, and 'leagues' that represents all league objects in an array",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": {
+      "total": 2,
+      "users": [
+        {
+          "league_id": 1,
+          "league_name": "testleague1",
+          "owner": 1,
+          "notes": "this is a test note",
+          "created_at": "2020-01-01T12:00:00.000Z"
+        },
+        {
+          "league_id": 2,
+          "league_name": "testleague2",
+          "owner": 3,
+          "notes": null,
+          "created_at": "2020-01-01T12:00:00.000Z"
+        }
+      ]
+    }
+  },
+  "GET /api/leagues/:league_id": {
+    "description": "serves an the requested league as an object on the key of 'league'",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": {
+      "league": {
+        "league_id": 2,
+        "league_name": "testleague2",
+        "owner": 3,
+        "notes": null,
+        "created_at": "2020-01-01T12:00:00.000Z"
       }
     }
   }
