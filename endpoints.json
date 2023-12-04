@@ -3,8 +3,8 @@
     "description": "serves up a json representation of all the available endpoints of the api"
   },
   "GET /api/users": {
-    "description": "serves an object with a key of 'total' that represents all retrieved users as an integer, and 'users' that represents all user objects in an array",
-    "queries": [],
+    "description": "serves an object with a key of 'total' that represents all retrieved users as an integer, and 'users' that represents all user objects in an array. Can take a query of 'sort_by' to determine how to arrange 'users' - valid sort_bys are 'join_date'(default) and 'username'. Can also take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'",
+    "queries": ["sort_by", "order"],
     "exampleInput": {},
     "exampleResponse": {
       "total": 2,
