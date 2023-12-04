@@ -3,6 +3,7 @@ const {
   fetchUserByUserId,
   createUser,
   createUserLogin,
+  updateUserByUserId,
 } = require("../models/users.models");
 
 exports.getUsers = (req, res, next) => {
@@ -36,6 +37,16 @@ exports.postUserLogin = (req, res, next) => {
   return createUserLogin(username, password)
     .then(({ status, message }) => {
       res.status(status).send({ message });
+    })
+    .catch((err) => next(err));
+};
+
+exports.patchUserByUserId = (req, res, next) => {
+  const { username, email, password, avatar_url } = req.body;
+  const { user_id } = req.params;
+  return updateUserByUserId(user_id, username, email, password, avatar_url)
+    .then((user) => {
+      res.status(200).send({ user });
     })
     .catch((err) => next(err));
 };
