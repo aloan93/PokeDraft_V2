@@ -113,5 +113,25 @@
     "exampleResponse2": {
       "message": "Password is incorrect"
     }
+  },
+  "PATCH /api/users/:user_id": {
+    "description": "updates the selected user via 'user_id' and serves the updated user as an object. Takes at least one property from 'username', 'email', 'password' and 'avatar_url'",
+    "queries": [],
+    "exampleInput": {
+      "username": "patched_username",
+      "email": "patched@email.com",
+      "password": "patched_password",
+      "avatar_url": "https://patched.com/new_image.png"
+    },
+    "exampleResponse": {
+      "user": {
+        "user_id": 1,
+        "username": "patched_username",
+        "email": "patched@email.com",
+        "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
+        "avatar_url": "https://patched.com/new_image.png",
+        "join_date": "2020-01-01T12:00:00.000Z"
+      }
+    }
   }
 }
