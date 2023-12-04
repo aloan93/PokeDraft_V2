@@ -11,7 +11,7 @@ exports.checkUserExists = (user_id) => {
     });
 };
 
-exports.fetchUsers = (sort_by = "join_date", order = "DESC") => {
+exports.fetchUsers = (sort_by = "join_date", order = "DESC", username) => {
   const validSortBys = { join_date: "join_date", username: "username" };
 
   if (!validSortBys[sort_by]) {
@@ -22,11 +22,19 @@ exports.fetchUsers = (sort_by = "join_date", order = "DESC") => {
     return Promise.reject({ status: 400, message: "Invalid order" });
   }
 
-  return database
-    .query(`SELECT * FROM users ORDER BY ${validSortBys[sort_by]} ${order};`)
-    .then((result) => {
-      return { total: result[0].length, users: result[0] };
-    });
+  let query = `SELECT * FROM users `;
+
+  const queryValues = [];
+  if (username) {
+    queryValues.push(username);
+    query += `WHERE username = ? `;
+  }
+
+  query += `ORDER BY ${validSortBys[sort_by]} ${order};`;
+
+  return database.query(query, queryValues).then((result) => {
+    return { total: result[0].length, users: result[0] };
+  });
 };
 
 exports.fetchUserByUserId = (user_id) => {
