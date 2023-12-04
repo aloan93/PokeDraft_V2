@@ -8,7 +8,8 @@ const {
 } = require("../models/users.models");
 
 exports.getUsers = (req, res, next) => {
-  return fetchUsers()
+  const { sort_by, order } = req.query;
+  return fetchUsers(sort_by, order)
     .then(({ total, users }) => {
       res.status(200).send({ total, users });
     })

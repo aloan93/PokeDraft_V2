@@ -11,10 +11,22 @@ exports.checkUserExists = (user_id) => {
     });
 };
 
-exports.fetchUsers = () => {
-  return database.query(`SELECT * FROM users`).then((result) => {
-    return { total: result[0].length, users: result[0] };
-  });
+exports.fetchUsers = (sort_by = "join_date", order = "DESC") => {
+  const validSortBys = { join_date: "join_date", username: "username" };
+
+  if (!validSortBys[sort_by]) {
+    return Promise.reject({ status: 400, message: "Invalid sort_by" });
+  }
+
+  if (order.toUpperCase() !== "DESC" && order.toUpperCase() !== "ASC") {
+    return Promise.reject({ status: 400, message: "Invalid order" });
+  }
+
+  return database
+    .query(`SELECT * FROM users ORDER BY ${validSortBys[sort_by]} ${order};`)
+    .then((result) => {
+      return { total: result[0].length, users: result[0] };
+    });
 };
 
 exports.fetchUserByUserId = (user_id) => {
