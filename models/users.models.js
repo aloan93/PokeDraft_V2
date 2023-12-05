@@ -11,9 +11,52 @@ exports.checkUserExists = (user_id) => {
     });
 };
 
-exports.fetchUsers = () => {
-  return database.query(`SELECT * FROM users`).then((result) => {
-    return { total: result[0].length, users: result[0] };
+exports.fetchUsers = (
+  sort_by = "join_date",
+  order = "DESC",
+  username,
+  limit = 10,
+  page = 1
+) => {
+  const validSortBys = { join_date: "join_date", username: "username" };
+
+  if (!validSortBys[sort_by]) {
+    return Promise.reject({ status: 400, message: "Invalid sort_by" });
+  }
+
+  if (order.toUpperCase() !== "DESC" && order.toUpperCase() !== "ASC") {
+    return Promise.reject({ status: 400, message: "Invalid order" });
+  }
+
+  if (limit % 1 !== 0 || page % 1 !== 0 || limit < 1 || page < 1) {
+    return Promise.reject({
+      status: 400,
+      message: "Invalid limit and/or page",
+    });
+  }
+
+  let query = `SELECT * FROM users `;
+
+  const queryValues = [];
+  if (username) {
+    queryValues.push(username);
+    query += `WHERE username = ? `;
+  }
+
+  query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
+
+  const totalQuery = database.query(query, queryValues).then((result) => {
+    return result[0].length;
+  });
+
+  query += `LIMIT ${limit} OFFSET ${(page - 1) * limit};`;
+
+  const usersQuery = database.query(query, queryValues).then((result) => {
+    return result[0];
+  });
+
+  return Promise.all([totalQuery, usersQuery]).then(([total, users]) => {
+    return { total, users };
   });
 };
 
