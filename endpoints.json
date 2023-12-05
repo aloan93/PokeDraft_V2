@@ -103,7 +103,7 @@
     "exampleResponse": null
   },
   "GET /api/leagues": {
-    "description": "serves an object with a key of 'total' that represents all retrieved leagues as an integer, and 'leagues' that represents all league objects in an array",
+    "description": "serves an object with a key of 'total' that represents all retrieved leagues as an integer, and 'leagues' that represents all quiried league objects in an array. Can take a query of 'sort_by' to determine how to arrange 'leagues' - valid sort_bys are 'created_at'(default) and 'league_name'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'league_name' to return a single matching league. Can take a query of 'limit' to determine the maximum number of league objects return in the 'leagues' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'leagues' to display in the array - must be a whole, positive number (defaults to 1)",
     "queries": [],
     "exampleInput": {},
     "exampleResponse": {
