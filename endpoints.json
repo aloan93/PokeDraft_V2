@@ -174,5 +174,11 @@
         "created_at": "2020-01-01T12:00:00.000Z"
       }
     }
+  },
+  "DELETE /api/leagues/:league_id": {
+    "description": "deletes the selected league via 'league_id'. deleting a league will cascade down and delete any children in other data tables (eg. 'teams')",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": null
   }
 }

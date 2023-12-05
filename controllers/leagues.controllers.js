@@ -3,6 +3,7 @@ const {
   fetchLeagueByLeagueId,
   createLeague,
   updateLeagueByLeagueId,
+  removeLeagueByLeagueId,
 } = require("../models/leagues.models");
 
 exports.getLeagues = (req, res, next) => {
@@ -37,6 +38,15 @@ exports.patchLeagueByLeagueId = (req, res, next) => {
   return updateLeagueByLeagueId(league_id, league_name, owner, notes)
     .then((league) => {
       res.status(200).send({ league });
+    })
+    .catch((err) => next(err));
+};
+
+exports.deleteLeagueByLeagueId = (req, res, next) => {
+  const { league_id } = req.params;
+  return removeLeagueByLeagueId(league_id)
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch((err) => next(err));
 };
