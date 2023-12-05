@@ -94,3 +94,15 @@ exports.updateLeagueByLeagueId = (league_id, league_name, owner, notes) => {
     })
     .then((league) => league);
 };
+
+exports.removeLeagueByLeagueId = (league_id) => {
+  const query = database.query(`DELETE FROM leagues WHERE league_id = ?;`, [
+    league_id,
+  ]);
+  const doesLeagueExist = this.checkLeagueExists(league_id);
+  return Promise.all([query, doesLeagueExist]).then((results) => {
+    if (results[0][0].affectedRows === 0) {
+      return Promise.reject({ status: 500, message: "Issue deleting league" });
+    } else return;
+  });
+};
