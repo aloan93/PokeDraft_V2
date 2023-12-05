@@ -2,6 +2,7 @@ const {
   fetchLeagues,
   fetchLeagueByLeagueId,
   createLeague,
+  updateLeagueByLeagueId,
 } = require("../models/leagues.models");
 
 exports.getLeagues = (req, res, next) => {
@@ -26,6 +27,16 @@ exports.postLeague = (req, res, next) => {
   return createLeague(league_name, owner)
     .then((league) => {
       res.status(201).send({ league });
+    })
+    .catch((err) => next(err));
+};
+
+exports.patchLeagueByLeagueId = (req, res, next) => {
+  const { league_id } = req.params;
+  const { league_name, owner, notes } = req.body;
+  return updateLeagueByLeagueId(league_id, league_name, owner, notes)
+    .then((league) => {
+      res.status(200).send({ league });
     })
     .catch((err) => next(err));
 };
