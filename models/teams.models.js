@@ -93,3 +93,15 @@ exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
     })
     .then((team) => team);
 };
+
+exports.removeTeamByTeamId = (team_id) => {
+  const doesTeamExist = this.checkTeamExists(team_id);
+  const query = database.query(`DELETE FROM teams WHERE team_id = ?;`, [
+    team_id,
+  ]);
+  return Promise.all([query, doesTeamExist]).then((results) => {
+    if (results[0][0].affectedRows === 0) {
+      return Promise.reject({ status: 500, message: "Issue deleting team" });
+    } else return;
+  });
+};
