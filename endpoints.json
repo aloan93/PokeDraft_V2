@@ -259,5 +259,11 @@
         "created_at": "2020-01-01T12:00:00.000Z"
       }
     }
+  },
+  "DELETE /api/teams/:team_id": {
+    "description": "deletes the selected team via 'team_id'. deleting a team will cascade down and delete any children in other data tables (eg. 'team_picks')",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": null
   }
 }

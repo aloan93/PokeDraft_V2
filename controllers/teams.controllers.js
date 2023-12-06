@@ -3,6 +3,7 @@ const {
   fetchTeamByTeamId,
   createTeam,
   updateTeamByTeamId,
+  removeTeamByTeamId,
 } = require("../models/teams.models");
 
 exports.getTeams = (req, res, next) => {
@@ -37,6 +38,15 @@ exports.patchTeamByTeamId = (req, res, next) => {
   return updateTeamByTeamId(team_id, team_name, coach, notes)
     .then((team) => {
       res.status(200).send({ team });
+    })
+    .catch((err) => next(err));
+};
+
+exports.deleteTeamByTeamId = (req, res, next) => {
+  const { team_id } = req.params;
+  return removeTeamByTeamId(team_id)
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch((err) => next(err));
 };
