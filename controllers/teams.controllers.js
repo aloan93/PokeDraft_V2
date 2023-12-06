@@ -2,6 +2,7 @@ const {
   fetchTeams,
   fetchTeamByTeamId,
   createTeam,
+  updateTeamByTeamId,
 } = require("../models/teams.models");
 
 exports.getTeams = (req, res, next) => {
@@ -26,6 +27,16 @@ exports.postTeam = (req, res, next) => {
   return createTeam(team_name, coach, league)
     .then((team) => {
       res.status(201).send({ team });
+    })
+    .catch((err) => next(err));
+};
+
+exports.patchTeamByTeamId = (req, res, next) => {
+  const { team_id } = req.params;
+  const { team_name, coach, notes } = req.body;
+  return updateTeamByTeamId(team_id, team_name, coach, notes)
+    .then((team) => {
+      res.status(200).send({ team });
     })
     .catch((err) => next(err));
 };

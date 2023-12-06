@@ -46,3 +46,50 @@ exports.createTeam = (team_name, coach, league) => {
       return result[0][0];
     });
 };
+
+exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
+  const doesTeamExist = this.checkTeamExists(team_id);
+
+  if (!team_name && !coach && !notes) {
+    return Promise.reject({
+      status: 400,
+      message: "At least one field must be selected for update",
+    });
+  }
+
+  let query = `UPDATE teams SET`;
+  const queryValues = [];
+  let count = 0;
+
+  if (team_name) {
+    queryValues.push(team_name);
+    query += ` team_name = ?`;
+    count++;
+  }
+
+  let doesUserExist;
+  if (coach) {
+    doesUserExist = checkUserExists(coach);
+    queryValues.push(coach);
+    if (count === 0) query += ` coach = ?`;
+    else query += `, coach = ?`;
+    count++;
+  }
+
+  if (notes) {
+    queryValues.push(notes);
+    if (count === 0) query += ` notes = ?`;
+    else query += `, notes = ?`;
+  }
+
+  query += ` WHERE team_id = ?;`;
+  queryValues.push(team_id);
+
+  const finalQuery = database.query(query, queryValues);
+
+  return Promise.all([finalQuery, doesUserExist, doesTeamExist])
+    .then(() => {
+      return this.fetchTeamByTeamId(team_id);
+    })
+    .then((team) => team);
+};

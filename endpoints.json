@@ -158,7 +158,7 @@
     }
   },
   "PATCH /api/leagues/:league_id": {
-    "description": "updates the selected league via 'league_id' and serves the updated league as an object. Takes at least one property from 'league_name', 'owner', 'notes'",
+    "description": "updates the selected league via 'league_id' and serves the updated league as an object. Takes at least one property from 'league_name', 'owner' and 'notes'",
     "queries": [],
     "exampleInput": {
       "league_name": "patched_league_name",
@@ -234,9 +234,28 @@
       "team": {
         "team_id": 3,
         "team_name": "test_team3",
-        "owner": 4,
+        "coach": 4,
         "league": 5,
         "notes": null,
+        "created_at": "2020-01-01T12:00:00.000Z"
+      }
+    }
+  },
+  "PATCH /api/teams/:team_id": {
+    "description": "updates the selected team via 'team_id' and serves the updated team as an object. Takes at least one property from 'team_name', 'coach' and 'notes'",
+    "queries": [],
+    "exampleInput": {
+      "team_name": "patched_team_name",
+      "coach": 3,
+      "notes": "patched_notes"
+    },
+    "exampleResponse": {
+      "team": {
+        "team_id": 3,
+        "team_name": "patched_team_name",
+        "coach": 3,
+        "league": 5,
+        "notes": "patched_notes",
         "created_at": "2020-01-01T12:00:00.000Z"
       }
     }
