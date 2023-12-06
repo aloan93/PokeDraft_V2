@@ -221,5 +221,24 @@
         "created_at": "2020-01-01T12:00:00.000Z"
       }
     }
+  },
+  "POST /api/teams": {
+    "description": "posts a new team and serves that team as an object on the key of 'team'. Takes 3 mandatory properties of 'team_name', 'coach' and 'league'. 'coach' must be an integer matching an existing user's 'user_id', and 'league' must be an integer matching an existing league's 'league_id'",
+    "queries": [],
+    "exampleInput": {
+      "team_name": "test_team3",
+      "coach": 4,
+      "league": 5
+    },
+    "exampleResponse": {
+      "team": {
+        "team_id": 3,
+        "team_name": "test_team3",
+        "owner": 4,
+        "league": 5,
+        "notes": null,
+        "created_at": "2020-01-01T12:00:00.000Z"
+      }
+    }
   }
 }
