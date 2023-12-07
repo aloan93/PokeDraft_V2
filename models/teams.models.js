@@ -67,12 +67,26 @@ exports.fetchTeamByTeamId = (team_id) => {
 exports.createTeam = (team_name, coach, league) => {
   const doesUserExist = checkUserExists(coach);
   const doesLeagueExist = checkLeagueExists(league);
-  const query = database.query(
-    `INSERT INTO teams (team_name, coach, league) VALUES (?, ?, ?);`,
-    [team_name, coach, league]
-  );
+  return Promise.all([doesLeagueExist, doesUserExist])
+    .then(() => {
+      return database.query(
+        `SELECT * FROM teams WHERE coach = ? AND league = ?;`,
+        [coach, league]
+      );
+    })
+    .then((result) => {
+      if (result[0].length !== 0) {
+        return Promise.reject({
+          status: 400,
+          message: "Each player may coach only one team per league",
+        });
+      }
 
-  return Promise.all([doesUserExist, doesLeagueExist, query])
+      return database.query(
+        `INSERT INTO teams (team_name, coach, league) VALUES (?, ?, ?);`,
+        [team_name, coach, league]
+      );
+    })
     .then(() => {
       return database.query(
         `SELECT * FROM teams WHERE team_id = LAST_INSERT_ID();`
