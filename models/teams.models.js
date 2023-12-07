@@ -1,25 +1,61 @@
 const database = require("../database/connection");
-const { checkUserExists } = require("./users.models");
-const { checkLeagueExists } = require("./leagues.models");
+const {
+  checkTeamExists,
+  checkLeagueExists,
+  checkUserExists,
+} = require("./model.utils");
 
-exports.checkTeamExists = (team_id) => {
-  return database
-    .query(`SELECT * FROM teams WHERE team_id = ?;`, [team_id])
-    .then((result) => {
-      if (result[0].length === 0) {
-        return Promise.reject({ status: 404, message: "Team not found" });
-      }
+exports.fetchTeams = (
+  sort_by = "created_at",
+  order = "desc",
+  team_name,
+  limit = 10,
+  page = 1
+) => {
+  const validSortBys = { created_at: "created_at", team_name: "team_name" };
+
+  if (!validSortBys[sort_by]) {
+    return Promise.reject({ status: 400, message: "Invalid sort_by" });
+  }
+
+  if (order.toUpperCase() !== "DESC" && order.toUpperCase() !== "ASC") {
+    return Promise.reject({ status: 400, message: "Invalid order" });
+  }
+
+  if (limit % 1 !== 0 || page % 1 !== 0 || limit < 1 || page < 1) {
+    return Promise.reject({
+      status: 400,
+      message: "Invalid limit and/or page",
     });
-};
+  }
 
-exports.fetchTeams = () => {
-  return database.query(`SELECT * FROM teams;`).then((result) => {
-    return { total: result[0].length, teams: result[0] };
+  let query = `SELECT * FROM teams `;
+
+  const queryValues = [];
+  if (team_name) {
+    queryValues.push(team_name);
+    query += `WHERE team_name = ? `;
+  }
+
+  query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
+
+  const totalQuery = database.query(query, queryValues).then((result) => {
+    return result[0].length;
+  });
+
+  query += `LIMIT ${limit} OFFSET ${(page - 1) * limit};`;
+
+  const teamsQuery = database.query(query, queryValues).then((result) => {
+    return result[0];
+  });
+
+  return Promise.all([totalQuery, teamsQuery]).then(([total, teams]) => {
+    return { total, teams };
   });
 };
 
 exports.fetchTeamByTeamId = (team_id) => {
-  const doesTeamExist = this.checkTeamExists(team_id);
+  const doesTeamExist = checkTeamExists(team_id);
   const query = database.query(`SELECT * FROM teams WHERE team_id = ?;`, [
     team_id,
   ]);
@@ -48,7 +84,7 @@ exports.createTeam = (team_name, coach, league) => {
 };
 
 exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
-  const doesTeamExist = this.checkTeamExists(team_id);
+  const doesTeamExist = checkTeamExists(team_id);
 
   if (!team_name && !coach && !notes) {
     return Promise.reject({
@@ -95,7 +131,7 @@ exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
 };
 
 exports.removeTeamByTeamId = (team_id) => {
-  const doesTeamExist = this.checkTeamExists(team_id);
+  const doesTeamExist = checkTeamExists(team_id);
   const query = database.query(`DELETE FROM teams WHERE team_id = ?;`, [
     team_id,
   ]);

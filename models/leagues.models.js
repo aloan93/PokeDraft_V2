@@ -1,15 +1,5 @@
 const database = require("../database/connection");
-const { checkUserExists } = require("./users.models");
-
-exports.checkLeagueExists = (league_id) => {
-  return database
-    .query(`SELECT * FROM leagues WHERE league_id = ?;`, [league_id])
-    .then((result) => {
-      if (result[0].length === 0) {
-        return Promise.reject({ status: 404, message: "League not found" });
-      }
-    });
-};
+const { checkLeagueExists, checkUserExists } = require("./model.utils");
 
 exports.fetchLeagues = (
   sort_by = "created_at",
@@ -61,7 +51,7 @@ exports.fetchLeagues = (
 };
 
 exports.fetchLeagueByLeagueId = (league_id) => {
-  const doesLeagueExist = this.checkLeagueExists(league_id);
+  const doesLeagueExist = checkLeagueExists(league_id);
 
   const query = database.query(`SELECT * FROM leagues WHERE league_id=?`, [
     league_id,
@@ -92,7 +82,7 @@ exports.createLeague = (league_name, owner) => {
 };
 
 exports.updateLeagueByLeagueId = (league_id, league_name, owner, notes) => {
-  const doesLeagueExist = this.checkLeagueExists(league_id);
+  const doesLeagueExist = checkLeagueExists(league_id);
 
   if (!league_name && !owner && !notes) {
     return Promise.reject({
@@ -142,7 +132,7 @@ exports.removeLeagueByLeagueId = (league_id) => {
   const query = database.query(`DELETE FROM leagues WHERE league_id = ?;`, [
     league_id,
   ]);
-  const doesLeagueExist = this.checkLeagueExists(league_id);
+  const doesLeagueExist = checkLeagueExists(league_id);
   return Promise.all([query, doesLeagueExist]).then((results) => {
     if (results[0][0].affectedRows === 0) {
       return Promise.reject({ status: 500, message: "Issue deleting league" });

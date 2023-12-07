@@ -1,15 +1,6 @@
 const database = require("../database/connection");
 const bcrypt = require("bcrypt");
-
-exports.checkUserExists = (user_id) => {
-  return database
-    .query(`SELECT * FROM users WHERE user_id = ?;`, [user_id])
-    .then((result) => {
-      if (result[0].length === 0) {
-        return Promise.reject({ status: 404, message: "User not found" });
-      }
-    });
-};
+const { checkUserExists } = require("./model.utils");
 
 exports.fetchUsers = (
   sort_by = "join_date",
@@ -61,7 +52,7 @@ exports.fetchUsers = (
 };
 
 exports.fetchUserByUserId = (user_id) => {
-  const doesUserExist = this.checkUserExists(user_id);
+  const doesUserExist = checkUserExists(user_id);
   const query = database.query(`SELECT * FROM users WHERE user_id=?;`, [
     user_id,
   ]);
@@ -118,7 +109,7 @@ exports.updateUserByUserId = (
     });
   }
 
-  return this.checkUserExists(user_id)
+  return checkUserExists(user_id)
     .then(() => {
       if (password) return bcrypt.hash(password, 10);
       else return;
@@ -169,7 +160,7 @@ exports.removeUserByUserId = (user_id) => {
   const query = database.query(`DELETE FROM users WHERE user_id = ?;`, [
     user_id,
   ]);
-  const doesUserExist = this.checkUserExists(user_id);
+  const doesUserExist = checkUserExists(user_id);
   return Promise.all([query, doesUserExist]).then((results) => {
     if (results[0][0].affectedRows === 0) {
       return Promise.reject({ status: 500, message: "Issue deleting user" });
