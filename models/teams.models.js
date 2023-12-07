@@ -1,16 +1,9 @@
 const database = require("../database/connection");
-const { checkUserExists } = require("./users.models");
-const { checkLeagueExists } = require("./leagues.models");
-
-exports.checkTeamExists = (team_id) => {
-  return database
-    .query(`SELECT * FROM teams WHERE team_id = ?;`, [team_id])
-    .then((result) => {
-      if (result[0].length === 0) {
-        return Promise.reject({ status: 404, message: "Team not found" });
-      }
-    });
-};
+const {
+  checkTeamExists,
+  checkLeagueExists,
+  checkUserExists,
+} = require("./model.utils");
 
 exports.fetchTeams = () => {
   return database.query(`SELECT * FROM teams;`).then((result) => {
@@ -19,7 +12,7 @@ exports.fetchTeams = () => {
 };
 
 exports.fetchTeamByTeamId = (team_id) => {
-  const doesTeamExist = this.checkTeamExists(team_id);
+  const doesTeamExist = checkTeamExists(team_id);
   const query = database.query(`SELECT * FROM teams WHERE team_id = ?;`, [
     team_id,
   ]);
@@ -48,7 +41,7 @@ exports.createTeam = (team_name, coach, league) => {
 };
 
 exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
-  const doesTeamExist = this.checkTeamExists(team_id);
+  const doesTeamExist = checkTeamExists(team_id);
 
   if (!team_name && !coach && !notes) {
     return Promise.reject({
@@ -95,7 +88,7 @@ exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
 };
 
 exports.removeTeamByTeamId = (team_id) => {
-  const doesTeamExist = this.checkTeamExists(team_id);
+  const doesTeamExist = checkTeamExists(team_id);
   const query = database.query(`DELETE FROM teams WHERE team_id = ?;`, [
     team_id,
   ]);
