@@ -183,7 +183,15 @@
   },
   "GET /api/teams": {
     "description": "serves an object with a key of 'total' that represents a count of all teams as an integer, and 'teams' that represents all quired team objects in an array. Can take a query of 'sort_by' to determine how to arrange 'teams' - valid sort_bys are 'created_at'(default) and 'team_name'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'team_name' to return a single matching team. Can take a query of 'coach' to return all teams coached by one particualr user. Can take a query of 'league' to return all teams signed up to one particualr league. Can take a query of 'limit' to determine the maximum number of team objects returned in the 'teams' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'teams' to display in the array - must be a whole, positive number (defaults to 1)",
-    "queries": ["sort_by", "order", "team_name", "limit", "page"],
+    "queries": [
+      "sort_by",
+      "order",
+      "team_name",
+      "coach",
+      "league",
+      "limit",
+      "page"
+    ],
     "exampleInput": {},
     "exampleResponse": {
       "total": 2,
