@@ -5,6 +5,7 @@ exports.fetchLeagues = (
   sort_by = "created_at",
   order = "DESC",
   league_name,
+  owner,
   limit = 10,
   page = 1
 ) => {
@@ -28,9 +29,17 @@ exports.fetchLeagues = (
   let query = `SELECT * FROM leagues `;
 
   const queryValues = [];
+  let count = 0;
   if (league_name) {
     queryValues.push(league_name);
     query += `WHERE league_name = ? `;
+    count++;
+  }
+
+  if (owner) {
+    queryValues.push(owner);
+    if (count === 0) query += `WHERE owner = ? `;
+    else query += `AND owner = ? `;
   }
 
   query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
