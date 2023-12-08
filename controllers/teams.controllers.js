@@ -7,8 +7,8 @@ const {
 } = require("../models/teams.models");
 
 exports.getTeams = (req, res, next) => {
-  const { sort_by, order, team_name, limit, page } = req.query;
-  return fetchTeams(sort_by, order, team_name, limit, page)
+  const { sort_by, order, team_name, coach, league, limit, page } = req.query;
+  return fetchTeams(sort_by, order, team_name, coach, league, limit, page)
     .then(({ total, teams }) => {
       res.status(200).send({ total, teams });
     })
