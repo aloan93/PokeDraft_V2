@@ -9,6 +9,8 @@ exports.fetchTeams = (
   sort_by = "created_at",
   order = "desc",
   team_name,
+  coach,
+  league,
   limit = 10,
   page = 1
 ) => {
@@ -32,9 +34,24 @@ exports.fetchTeams = (
   let query = `SELECT * FROM teams `;
 
   const queryValues = [];
+  let count = 0;
   if (team_name) {
     queryValues.push(team_name);
     query += `WHERE team_name = ? `;
+    count++;
+  }
+
+  if (coach) {
+    queryValues.push(coach);
+    if (count === 0) query += `WHERE coach = ? `;
+    else query += `AND coach = ? `;
+    count++;
+  }
+
+  if (league) {
+    queryValues.push(league);
+    if (count === 0) query += `WHERE league = ? `;
+    else query += `AND league = ? `;
   }
 
   query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
