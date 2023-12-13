@@ -1,8 +1,12 @@
 const database = require("../connection");
+const pokemonData = require("../data/pokemon");
 
 const seed = () => {
   return database
-    .query(`DROP TABLE IF EXISTS teams;`)
+    .query(`DROP TABLE IF EXISTS pokemon;`)
+    .then(() => {
+      return database.query(`DROP TABLE IF EXISTS teams;`);
+    })
     .then(() => {
       return database.query(`DROP TABLE IF EXISTS leagues;`);
     })
@@ -52,6 +56,48 @@ const seed = () => {
             REFERENCES leagues(league_id)
             ON DELETE CASCADE
           )`);
+    })
+    .then(() => {
+      return database.query(`
+          CREATE TABLE pokemon(
+          pokemon_name VARCHAR(30) NOT NULL,
+          pokedex_no INT NOT NULL,
+          speed_stat INT NOT NULL,
+          type_1 VARCHAR(12) NOT NULL,
+          type_2 VARCHAR(12) DEFAULT null,
+          ability_1 VARCHAR(30) NOT NULL,
+          ability_2 VARCHAR(30) DEFAULT null,
+          ability_3 VARCHAR(30) DEFAULT null,
+          PRIMARY KEY (pokemon_name)
+          )
+      `);
+    })
+    .then(() => {
+      const formattedPokemonData = pokemonData.map(
+        ({
+          name,
+          pokedex_no,
+          speed_stat,
+          type_1,
+          type_2,
+          ability_1,
+          ability_2,
+          ability_3,
+        }) => [
+          name,
+          pokedex_no,
+          speed_stat,
+          type_1,
+          type_2,
+          ability_1,
+          ability_2,
+          ability_3,
+        ]
+      );
+
+      const query = `INSERT INTO pokemon (pokemon_name, pokedex_no, speed_stat, type_1, type_2, ability_1, ability_2, ability_3) VALUES ?;`;
+
+      return database.query(query, [formattedPokemonData]);
     })
     .catch((err) => console.log(err));
 };
