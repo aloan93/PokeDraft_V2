@@ -3,7 +3,7 @@
     "description": "serves up a json representation of all the available endpoints of the api"
   },
   "GET /api/users": {
-    "description": "serves an object with a key of 'total' that represents a count of all users as an integer, and 'users' that represents all quired user objects in an array. Can take a query of 'sort_by' to determine how to arrange 'users' - valid sort_bys are 'join_date'(default) and 'username'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'username' to return a single matching user. Can take a query of 'limit' to determine the maximum number of user objects return in the 'users' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'users' to display in the array - must be a whole, positive number (defaults to 1)",
+    "description": "serves an object with a key of 'total' that represents a count of all queried users as an integer, and 'users' that represents all quired user objects in an array. Can take a query of 'sort_by' to determine how to arrange 'users' - valid sort_bys are 'join_date'(default) and 'username'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'username' to return a single matching user. Can take a query of 'limit' to determine the maximum number of user objects return in the 'users' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'users' to display in the array - must be a whole, positive number (defaults to 1)",
     "queries": ["sort_by", "order", "username", "limit", "page"],
     "exampleInput": {},
     "exampleResponse": {
@@ -103,7 +103,7 @@
     "exampleResponse": null
   },
   "GET /api/leagues": {
-    "description": "serves an object with a key of 'total' that represents all retrieved leagues as an integer, and 'leagues' that represents all quiried league objects in an array. Can take a query of 'sort_by' to determine how to arrange 'leagues' - valid sort_bys are 'created_at'(default) and 'league_name'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'league_name' to return a single matching league. Can take a query of 'owner' to return all leagues owned by one particualr user. Can take a query of 'limit' to determine the maximum number of league objects returned in the 'leagues' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'leagues' to display in the array - must be a whole, positive number (defaults to 1)",
+    "description": "serves an object with a key of 'total' that represents all queried leagues as an integer, and 'leagues' that represents all quiried league objects in an array. Can take a query of 'sort_by' to determine how to arrange 'leagues' - valid sort_bys are 'created_at'(default) and 'league_name'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'league_name' to return a single matching league. Can take a query of 'owner' to return all leagues owned by one particualr user. Can take a query of 'limit' to determine the maximum number of league objects returned in the 'leagues' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'leagues' to display in the array - must be a whole, positive number (defaults to 1)",
     "queries": ["sort_by", "order", "league_name", "owner", "limit", "page"],
     "exampleInput": {},
     "exampleResponse": {
@@ -182,7 +182,7 @@
     "exampleResponse": null
   },
   "GET /api/teams": {
-    "description": "serves an object with a key of 'total' that represents a count of all teams as an integer, and 'teams' that represents all quired team objects in an array. Can take a query of 'sort_by' to determine how to arrange 'teams' - valid sort_bys are 'created_at'(default) and 'team_name'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'team_name' to return a single matching team. Can take a query of 'coach' to return all teams coached by one particualr user. Can take a query of 'league' to return all teams signed up to one particualr league. Can take a query of 'limit' to determine the maximum number of team objects returned in the 'teams' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'teams' to display in the array - must be a whole, positive number (defaults to 1)",
+    "description": "serves an object with a key of 'total' that represents a count of all queried teams as an integer, and 'teams' that represents all quired team objects in an array. Can take a query of 'sort_by' to determine how to arrange 'teams' - valid sort_bys are 'created_at'(default) and 'team_name'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'team_name' to return a single matching team. Can take a query of 'coach' to return all teams coached by one particualr user. Can take a query of 'league' to return all teams signed up to one particualr league. Can take a query of 'limit' to determine the maximum number of team objects returned in the 'teams' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'teams' to display in the array - must be a whole, positive number (defaults to 1)",
     "queries": [
       "sort_by",
       "order",
@@ -273,5 +273,61 @@
     "queries": [],
     "exampleInput": {},
     "exampleResponse": null
+  },
+  "GET /api/pokemon": {
+    "description": "serves an object with a key of 'total' that represents a count of all queried pokemon as an integer, and 'pokemon' that represents all quired pokemon objects in an array. Can take a query of 'sort_by' to determine how to arrange 'pokemon' - valid sort_bys are 'pokedex_no'(default), 'pokemon_name' and 'speed_stat'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'desc'(default) and 'asc'. Can take a query of 'pokedex_no' to return all matching pokemon varients. Can take a queries of 'type' and 'type2' to return all pokemon of that include that type (if one is quired) or that match the typing combination (if two are queried). Can take a query of 'ability' to return all pokemon that can have that particular ability. Can take a query of 'limit' to determine the maximum number of pokemon objects returned in the 'pokemon' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'pokemon' to display in the array - must be a whole, positive number (defaults to 1)",
+    "queries": [
+      "sort_by",
+      "order",
+      "pokedex_no",
+      "type",
+      "type2",
+      "ability",
+      "limit",
+      "page"
+    ],
+    "exampleInput": {},
+    "exampleResponse": {
+      "total": 2,
+      "users": [
+        {
+          "pokemon_name": "scovillain",
+          "pokedex_no": 952,
+          "speed_stat": 75,
+          "type_1": "grass",
+          "type_2": "fire",
+          "ability_1": "chlorophyll",
+          "ability_2": "insomnia",
+          "ability_3": "moody"
+        },
+        {
+          "pokemon_name": "ogerpon-hearthflame-mask",
+          "pokedex_no": 1017,
+          "speed_stat": 110,
+          "type_1": "grass",
+          "type_2": "fire",
+          "ability_1": "mold-breaker",
+          "ability_2": null,
+          "ability_3": null
+        }
+      ]
+    }
+  },
+  "GET /api/pokemon/:pokemon_name": {
+    "description": "serves the requested pokemon as an object on the key of 'pokemon'",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": {
+      "pokemon": {
+        "pokemon_name": "shaymin-sky",
+        "pokedex_no": 492,
+        "speed_stat": 127,
+        "type_1": "grass",
+        "type_2": "flying",
+        "ability_1": "serene-grace",
+        "ability_2": null,
+        "ability_3": null
+      }
+    }
   }
 }
