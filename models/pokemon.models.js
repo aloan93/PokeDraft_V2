@@ -1,4 +1,5 @@
 const database = require("../database/connection");
+const { checkPokemonExists } = require("./model.utils");
 
 exports.fetchPokemon = (
   sort_by = "pokedex_no",
@@ -80,5 +81,16 @@ exports.fetchPokemon = (
 
   return Promise.all([totalQuery, pokemonQuery]).then(([total, pokemon]) => {
     return { total, pokemon };
+  });
+};
+
+exports.fetchPokemonByPokemonName = (pokemon_name) => {
+  const doesPokemonExist = checkPokemonExists(pokemon_name);
+  const query = database.query(
+    `SELECT * FROM pokemon WHERE pokemon_name = ?;`,
+    [pokemon_name]
+  );
+  return Promise.all([query, doesPokemonExist]).then((results) => {
+    return results[0][0][0];
   });
 };

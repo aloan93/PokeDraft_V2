@@ -29,3 +29,13 @@ exports.checkTeamExists = (team_id) => {
       }
     });
 };
+
+exports.checkPokemonExists = (pokemon_name) => {
+  return database
+    .query(`SELECT * FROM pokemon WHERE pokemon_name = ?;`, [pokemon_name])
+    .then((result) => {
+      if (result[0].length === 0) {
+        return Promise.reject({ status: 404, message: "Pokemon not found" });
+      }
+    });
+};
