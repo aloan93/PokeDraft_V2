@@ -312,5 +312,22 @@
         }
       ]
     }
+  },
+  "GET /api/pokemon/:pokemon_name": {
+    "description": "serves the requested pokemon as an object on the key of 'pokemon'",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": {
+      "pokemon": {
+        "pokemon_name": "shaymin-sky",
+        "pokedex_no": 492,
+        "speed_stat": 127,
+        "type_1": "grass",
+        "type_2": "flying",
+        "ability_1": "serene-grace",
+        "ability_2": null,
+        "ability_3": null
+      }
+    }
   }
 }
