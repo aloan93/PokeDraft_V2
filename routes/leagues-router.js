@@ -5,6 +5,7 @@ const {
   postLeague,
   patchLeagueByLeagueId,
   deleteLeagueByLeagueId,
+  postLeaguePokemon,
 } = require("../controllers/leagues.controllers");
 
 leaguesRouter.get("/", getLeagues);
@@ -12,6 +13,8 @@ leaguesRouter.get("/", getLeagues);
 leaguesRouter.get("/:league_id", getLeagueByLeagueId);
 
 leaguesRouter.post("/", postLeague);
+
+leaguesRouter.post("/:league_id/pokemon", postLeaguePokemon);
 
 leaguesRouter.patch("/:league_id", patchLeagueByLeagueId);
 

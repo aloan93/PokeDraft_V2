@@ -1,5 +1,10 @@
 const database = require("../database/connection");
-const { checkLeagueExists, checkUserExists } = require("./model.utils");
+const {
+  checkLeagueExists,
+  checkUserExists,
+  checkPokemonExists,
+  checkLeaguePokemonExists,
+} = require("./model.utils");
 
 exports.fetchLeagues = (
   sort_by = "created_at",
@@ -83,6 +88,27 @@ exports.createLeague = (league_name, owner) => {
     .then(() => {
       return database.query(
         `SELECT * FROM leagues WHERE league_id = LAST_INSERT_ID();`
+      );
+    })
+    .then((result) => {
+      return result[0][0];
+    });
+};
+
+exports.createLeaguePokemon = (league_id, pokemon_name) => {
+  return checkPokemonExists(pokemon_name)
+    .then(() => {
+      return checkLeaguePokemonExists(league_id, pokemon_name);
+    })
+    .then(() => {
+      return database.query(
+        `INSERT INTO leagues_pokemon (league, pokemon) VALUES (?, ?);`,
+        [league_id, pokemon_name]
+      );
+    })
+    .then(() => {
+      return database.query(
+        `SELECT * FROM leagues_pokemon WHERE leagues_pokemon_id = LAST_INSERT_ID()`
       );
     })
     .then((result) => {

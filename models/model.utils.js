@@ -39,3 +39,19 @@ exports.checkPokemonExists = (pokemon_name) => {
       }
     });
 };
+
+exports.checkLeaguePokemonExists = (league_id, pokemon_name) => {
+  return database
+    .query(`SELECT * FROM leagues_pokemon WHERE league = ? AND pokemon = ?;`, [
+      league_id,
+      pokemon_name,
+    ])
+    .then((result) => {
+      if (result[0].length > 0) {
+        return Promise.reject({
+          status: 400,
+          message: "Pokemon is already in this League",
+        });
+      }
+    });
+};

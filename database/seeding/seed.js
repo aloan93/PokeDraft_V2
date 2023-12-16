@@ -80,11 +80,11 @@ const seed = () => {
           CREATE TABLE leagues_pokemon(
           leagues_pokemon_id SERIAL NOT NULL,
           league BIGINT UNSIGNED NOT NULL,
-          pokemon_name VARCHAR(30) NOT NULL,
+          pokemon VARCHAR(30) NOT NULL,
           tier VARCHAR(12) DEFAULT "untiered",
           is_picked BOOLEAN DEFAULT false,
           PRIMARY KEY (leagues_pokemon_id),
-          FOREIGN KEY (pokemon_name)
+          FOREIGN KEY (pokemon)
             REFERENCES pokemon(pokemon_name)
             ON DELETE CASCADE
           )
