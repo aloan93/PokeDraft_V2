@@ -76,6 +76,62 @@ exports.fetchLeagueByLeagueId = (league_id) => {
   });
 };
 
+exports.fetchLeaguePokemonByLeagueId = (
+  league_id,
+  sort_by = "pokedex_no",
+  order = "ASC",
+  limit = 10,
+  page = 1
+) => {
+  const validSortBys = {
+    pokemon_name: "pokemon_name",
+    pokedex_no: "pokedex_no",
+    speed_stat: "speed_stat",
+  };
+
+  if (!validSortBys[sort_by]) {
+    return Promise.reject({ status: 400, message: "Invalid sort_by" });
+  }
+
+  if (order.toUpperCase() !== "DESC" && order.toUpperCase() !== "ASC") {
+    return Promise.reject({ status: 400, message: "Invalid order" });
+  }
+
+  if (limit % 1 !== 0 || page % 1 !== 0 || limit < 1 || page < 1) {
+    return Promise.reject({
+      status: 400,
+      message: "Invalid limit and/or page",
+    });
+  }
+
+  let query = `SELECT leagues_pokemon.tier, leagues_pokemon.is_picked, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name WHERE league = ? `;
+
+  const queryValues = [league_id];
+  // queries here
+
+  query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
+
+  const totalQuery = database.query(query, queryValues).then((result) => {
+    return result[0].length;
+  });
+
+  query += `LIMIT ${limit} OFFSET ${(page - 1) * limit};`;
+
+  const leaguePokemonQuery = database
+    .query(query, queryValues)
+    .then((result) => {
+      return result[0];
+    });
+
+  const doesLeagueExist = checkLeagueExists(league_id);
+
+  return Promise.all([totalQuery, leaguePokemonQuery, doesLeagueExist]).then(
+    ([total, pokemon]) => {
+      return { total, pokemon };
+    }
+  );
+};
+
 exports.createLeague = (league_name, owner) => {
   const doesUserExist = checkUserExists(owner);
 
