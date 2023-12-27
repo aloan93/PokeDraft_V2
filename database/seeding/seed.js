@@ -82,11 +82,14 @@ const seed = () => {
           league BIGINT UNSIGNED NOT NULL,
           pokemon VARCHAR(30) NOT NULL,
           tier VARCHAR(12) DEFAULT "untiered",
-          is_picked BOOLEAN DEFAULT false,
+          drafted_by BIGINT UNSIGNED DEFAULT null,
           PRIMARY KEY (leagues_pokemon_id),
           FOREIGN KEY (pokemon)
             REFERENCES pokemon(pokemon_name)
-            ON DELETE CASCADE
+            ON DELETE CASCADE,
+          FOREIGN KEY (drafted_by)
+            REFERENCES teams(team_id)
+            ON DELETE SET null
           )
       `);
     })

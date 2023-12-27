@@ -109,7 +109,7 @@ exports.fetchLeaguePokemonByLeagueId = (
     });
   }
 
-  let query = `SELECT leagues_pokemon.tier, leagues_pokemon.is_picked, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name WHERE league = ? `;
+  let query = `SELECT leagues_pokemon.tier, leagues_pokemon.drafted_by, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name WHERE league = ? `;
 
   const queryValues = [league_id];
   if (pokedex_no) {
