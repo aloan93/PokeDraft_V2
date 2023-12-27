@@ -9,6 +9,7 @@ const {
   patchLeagueByLeagueId,
   patchLeaguePokemonByLeagueIdAndPokemonName,
   deleteLeagueByLeagueId,
+  deleteLeaguePokemonByLeagueIdAndPokemonName,
 } = require("../controllers/leagues.controllers");
 
 leaguesRouter.get("/", getLeagues);
@@ -34,5 +35,10 @@ leaguesRouter.patch(
 );
 
 leaguesRouter.delete("/:league_id", deleteLeagueByLeagueId);
+
+leaguesRouter.delete(
+  "/:league_id/pokemon/:pokemon_name",
+  deleteLeaguePokemonByLeagueIdAndPokemonName
+);
 
 module.exports = { leaguesRouter };

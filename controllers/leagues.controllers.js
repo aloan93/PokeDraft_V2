@@ -8,6 +8,7 @@ const {
   updateLeagueByLeagueId,
   updateLeaguePokemonByLeagueIdAndPokemonName,
   removeLeagueByLeagueId,
+  removeLeaguePokemonByLeagueIdAndPokemonName,
 } = require("../models/leagues.models");
 
 exports.getLeagues = (req, res, next) => {
@@ -120,6 +121,15 @@ exports.patchLeaguePokemonByLeagueIdAndPokemonName = (req, res, next) => {
 exports.deleteLeagueByLeagueId = (req, res, next) => {
   const { league_id } = req.params;
   return removeLeagueByLeagueId(league_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => next(err));
+};
+
+exports.deleteLeaguePokemonByLeagueIdAndPokemonName = (req, res, next) => {
+  const { league_id, pokemon_name } = req.params;
+  return removeLeaguePokemonByLeagueIdAndPokemonName(league_id, pokemon_name)
     .then(() => {
       res.sendStatus(204);
     })

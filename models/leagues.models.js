@@ -359,3 +359,32 @@ exports.removeLeagueByLeagueId = (league_id) => {
     } else return;
   });
 };
+
+exports.removeLeaguePokemonByLeagueIdAndPokemonName = (
+  league_id,
+  pokemon_name
+) => {
+  const doesLeagueExist = checkLeagueExists(league_id);
+  const doesPokemonExist = checkPokemonExists(pokemon_name);
+  return Promise.all([doesLeagueExist, doesPokemonExist])
+    .then(() => {
+      return this.fetchSingleLeaguePokemonByLeagueIdAndPokemonName(
+        league_id,
+        pokemon_name
+      );
+    })
+    .then(() => {
+      return database.query(
+        `DELETE FROM leagues_pokemon WHERE league = ? AND pokemon = ?;`,
+        [league_id, pokemon_name]
+      );
+    })
+    .then((result) => {
+      if (result[0].affectedRows === 0) {
+        return Promise.reject({
+          status: 500,
+          message: "Issue deleting leaguePokemon",
+        });
+      } else return;
+    });
+};
