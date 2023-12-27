@@ -38,6 +38,7 @@ exports.getLeaguePokemonByLeagueId = (req, res, next) => {
     type2,
     ability,
     tier,
+    team,
     limit,
     page,
   } = req.query;
@@ -50,6 +51,7 @@ exports.getLeaguePokemonByLeagueId = (req, res, next) => {
     type2,
     ability,
     tier,
+    team,
     limit,
     page
   )

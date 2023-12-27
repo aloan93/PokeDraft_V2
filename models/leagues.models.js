@@ -87,6 +87,7 @@ exports.fetchLeaguePokemonByLeagueId = (
   type2,
   ability,
   tier,
+  team,
   limit = 10,
   page = 1
 ) => {
@@ -141,6 +142,11 @@ exports.fetchLeaguePokemonByLeagueId = (
   if (tier) {
     queryValues.push(tier);
     query += `AND tier = ? `;
+  }
+
+  if (team) {
+    queryValues.push(team);
+    query += `AND drafted_by = ? `;
   }
 
   query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
