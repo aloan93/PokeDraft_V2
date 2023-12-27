@@ -251,6 +251,56 @@ exports.updateLeagueByLeagueId = (league_id, league_name, owner, notes) => {
     .then((league) => league);
 };
 
+exports.updateLeaguePokemonByLeagueIdAndPokemonName = (
+  league_id,
+  pokemon_name,
+  tier,
+  drafted_by
+) => {
+  if (!tier && !drafted_by) {
+    return Promise.reject({
+      status: 400,
+      message: "At least one field must be selected for update",
+    });
+  }
+
+  return checkLeagueExist(league_id)
+    .then(() => {
+      return checkPokemonExists(pokemon_name);
+    })
+    .then(() => {
+      let query = `UPDATE leagues_pokemon SET`;
+      const queryValues = [];
+      let count = 0;
+
+      if (tier) {
+        queryValues.push(tier);
+        query += ` tier = ?`;
+        count++;
+      }
+
+      if (drafted_by) {
+        queryValues.push(drafted_by);
+        if (count === 0) query += ` drafted_by = ?`;
+        else query += `, drafted_by = ?`;
+      }
+
+      query += ` WHERE league_id = ? AND pokemon_name = ?;`;
+      queryValues.push(league_id);
+      queryValues.push(pokemon_name);
+
+      if (drafted_by) {
+        return checkUserExists(drafted_by)
+          .then(() => {
+            return database.query(query, queryValues);
+          })
+          .then(() => {
+            ////////////////////////////////////
+          });
+      }
+    });
+};
+
 exports.removeLeagueByLeagueId = (league_id) => {
   const query = database.query(`DELETE FROM leagues WHERE league_id = ?;`, [
     league_id,

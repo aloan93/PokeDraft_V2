@@ -2,11 +2,12 @@ const leaguesRouter = require("express").Router();
 const {
   getLeagues,
   getLeagueByLeagueId,
-  postLeague,
-  patchLeagueByLeagueId,
-  deleteLeagueByLeagueId,
-  postLeaguePokemon,
   getLeaguePokemonByLeagueId,
+  postLeague,
+  postLeaguePokemon,
+  patchLeagueByLeagueId,
+  patchLeaguePokemonByLeagueIdAndPokemonName,
+  deleteLeagueByLeagueId,
 } = require("../controllers/leagues.controllers");
 
 leaguesRouter.get("/", getLeagues);
@@ -20,6 +21,11 @@ leaguesRouter.post("/", postLeague);
 leaguesRouter.post("/:league_id/pokemon", postLeaguePokemon);
 
 leaguesRouter.patch("/:league_id", patchLeagueByLeagueId);
+
+leaguesRouter.patch(
+  "/:league_id/pokemon/:pokemon_name",
+  patchLeaguePokemonByLeagueIdAndPokemonName
+);
 
 leaguesRouter.delete("/:league_id", deleteLeagueByLeagueId);
 

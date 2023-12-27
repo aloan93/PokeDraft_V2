@@ -5,6 +5,7 @@ const {
   createLeague,
   createLeaguePokemon,
   updateLeagueByLeagueId,
+  updateLeaguePokemonByLeagueIdAndPokemonName,
   removeLeagueByLeagueId,
 } = require("../models/leagues.models");
 
@@ -82,6 +83,21 @@ exports.patchLeagueByLeagueId = (req, res, next) => {
   return updateLeagueByLeagueId(league_id, league_name, owner, notes)
     .then((league) => {
       res.status(200).send({ league });
+    })
+    .catch((err) => next(err));
+};
+
+exports.patchLeaguePokemonByLeagueIdAndPokemonName = (req, res, next) => {
+  const { league_id, pokemon_name } = req.params;
+  const { tier, drafted_by } = req.body;
+  return updateLeaguePokemonByLeagueIdAndPokemonName(
+    league_id,
+    pokemon_name,
+    tier,
+    drafted_by
+  )
+    .then((leaguePokemon) => {
+      res.status(200).send({ leaguePokemon });
     })
     .catch((err) => next(err));
 };
