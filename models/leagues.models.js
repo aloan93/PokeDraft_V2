@@ -4,6 +4,8 @@ const {
   checkUserExists,
   checkPokemonExists,
   checkLeaguePokemonExists,
+  checkTeamExists,
+  checkTeamExistsInLeague,
 } = require("./model.utils");
 
 exports.fetchLeagues = (
@@ -290,7 +292,7 @@ exports.updateLeaguePokemonByLeagueIdAndPokemonName = (
     });
   }
 
-  return checkLeagueExist(league_id)
+  return checkLeagueExists(league_id)
     .then(() => {
       return checkPokemonExists(pokemon_name);
     })
@@ -311,18 +313,31 @@ exports.updateLeaguePokemonByLeagueIdAndPokemonName = (
         else query += `, drafted_by = ?`;
       }
 
-      query += ` WHERE league_id = ? AND pokemon_name = ?;`;
+      query += ` WHERE league = ? AND pokemon = ?;`;
       queryValues.push(league_id);
       queryValues.push(pokemon_name);
 
       if (drafted_by) {
-        return checkUserExists(drafted_by)
+        return checkTeamExists(drafted_by)
+          .then(() => {
+            return checkTeamExistsInLeague(league_id, drafted_by);
+          })
           .then(() => {
             return database.query(query, queryValues);
           })
           .then(() => {
-            ////////////////////////////////////
+            return this.fetchSingleLeaguePokemonByLeagueIdAndPokemonName(
+              league_id,
+              pokemon_name
+            );
           });
+      } else {
+        return database.query(query, queryValues).then(() => {
+          return this.fetchSingleLeaguePokemonByLeagueIdAndPokemonName(
+            league_id,
+            pokemon_name
+          );
+        });
       }
     });
 };
