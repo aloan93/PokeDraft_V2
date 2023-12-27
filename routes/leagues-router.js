@@ -3,6 +3,7 @@ const {
   getLeagues,
   getLeagueByLeagueId,
   getLeaguePokemonByLeagueId,
+  getSingleLeaguePokemonByLeagueIdAndPokemonName,
   postLeague,
   postLeaguePokemon,
   patchLeagueByLeagueId,
@@ -15,6 +16,11 @@ leaguesRouter.get("/", getLeagues);
 leaguesRouter.get("/:league_id", getLeagueByLeagueId);
 
 leaguesRouter.get("/:league_id/pokemon", getLeaguePokemonByLeagueId);
+
+leaguesRouter.get(
+  "/:league_id/pokemon/:pokemon_name",
+  getSingleLeaguePokemonByLeagueIdAndPokemonName
+);
 
 leaguesRouter.post("/", postLeague);
 

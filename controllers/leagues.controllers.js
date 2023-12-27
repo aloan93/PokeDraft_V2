@@ -2,6 +2,7 @@ const {
   fetchLeagues,
   fetchLeagueByLeagueId,
   fetchLeaguePokemonByLeagueId,
+  fetchSingleLeaguePokemonByLeagueIdAndPokemonName,
   createLeague,
   createLeaguePokemon,
   updateLeagueByLeagueId,
@@ -54,6 +55,18 @@ exports.getLeaguePokemonByLeagueId = (req, res, next) => {
   )
     .then(({ total, pokemon }) => {
       res.status(200).send({ total, pokemon });
+    })
+    .catch((err) => next(err));
+};
+
+exports.getSingleLeaguePokemonByLeagueIdAndPokemonName = (req, res, next) => {
+  const { league_id, pokemon_name } = req.params;
+  return fetchSingleLeaguePokemonByLeagueIdAndPokemonName(
+    league_id,
+    pokemon_name
+  )
+    .then((leaguePokemon) => {
+      res.status(200).send({ leaguePokemon });
     })
     .catch((err) => next(err));
 };

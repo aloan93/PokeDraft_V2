@@ -164,6 +164,32 @@ exports.fetchLeaguePokemonByLeagueId = (
   );
 };
 
+exports.fetchSingleLeaguePokemonByLeagueIdAndPokemonName = (
+  league_id,
+  pokemon_name
+) => {
+  const doesLeagueExist = checkLeagueExists(league_id);
+
+  const doesPokemonExist = checkPokemonExists(pokemon_name);
+
+  const query = database.query(
+    `SELECT leagues_pokemon.tier, leagues_pokemon.drafted_by, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name WHERE league = ? AND pokemon = ?;`,
+    [league_id, pokemon_name]
+  );
+
+  return Promise.all([query, doesLeagueExist, doesPokemonExist]).then(
+    (results) => {
+      if (results[0][0].length === 0) {
+        return Promise.reject({
+          status: 404,
+          message: "Pokemon not found in this league",
+        });
+      }
+      return results[0][0][0];
+    }
+  );
+};
+
 exports.createLeague = (league_name, owner) => {
   const doesUserExist = checkUserExists(owner);
 
