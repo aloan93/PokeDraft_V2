@@ -28,8 +28,17 @@ exports.getLeagueByLeagueId = (req, res, next) => {
 
 exports.getLeaguePokemonByLeagueId = (req, res, next) => {
   const { league_id } = req.params;
-  const { sort_by, order, pokedex_no, type, type2, ability, limit, page } =
-    req.query;
+  const {
+    sort_by,
+    order,
+    pokedex_no,
+    type,
+    type2,
+    ability,
+    tier,
+    limit,
+    page,
+  } = req.query;
   return fetchLeaguePokemonByLeagueId(
     league_id,
     sort_by,
@@ -38,6 +47,7 @@ exports.getLeaguePokemonByLeagueId = (req, res, next) => {
     type,
     type2,
     ability,
+    tier,
     limit,
     page
   )
