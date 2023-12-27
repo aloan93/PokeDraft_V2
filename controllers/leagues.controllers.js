@@ -28,8 +28,19 @@ exports.getLeagueByLeagueId = (req, res, next) => {
 
 exports.getLeaguePokemonByLeagueId = (req, res, next) => {
   const { league_id } = req.params;
-  const { sort_by, order, limit, page } = req.query;
-  return fetchLeaguePokemonByLeagueId(league_id, sort_by, order, limit, page)
+  const { sort_by, order, pokedex_no, type, type2, ability, limit, page } =
+    req.query;
+  return fetchLeaguePokemonByLeagueId(
+    league_id,
+    sort_by,
+    order,
+    pokedex_no,
+    type,
+    type2,
+    ability,
+    limit,
+    page
+  )
     .then(({ total, pokemon }) => {
       res.status(200).send({ total, pokemon });
     })

@@ -80,6 +80,10 @@ exports.fetchLeaguePokemonByLeagueId = (
   league_id,
   sort_by = "pokedex_no",
   order = "ASC",
+  pokedex_no,
+  type,
+  type2,
+  ability,
   limit = 10,
   page = 1
 ) => {
@@ -107,7 +111,29 @@ exports.fetchLeaguePokemonByLeagueId = (
   let query = `SELECT leagues_pokemon.tier, leagues_pokemon.is_picked, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name WHERE league = ? `;
 
   const queryValues = [league_id];
-  // queries here
+  if (pokedex_no) {
+    queryValues.push(pokedex_no);
+    query += `AND pokedex_no = ? `;
+  }
+
+  if (type) {
+    queryValues.push(type);
+    queryValues.push(type);
+    query += `AND (type_1 = ? OR type_2 = ?) `;
+  }
+
+  if (type2) {
+    queryValues.push(type2);
+    queryValues.push(type2);
+    query += `AND (type_1 = ? OR type_2 = ?) `;
+  }
+
+  if (ability) {
+    queryValues.push(ability);
+    queryValues.push(ability);
+    queryValues.push(ability);
+    query += `AND (ability_1 = ? OR ability_2 = ? OR ability_3 = ?) `;
+  }
 
   query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
 
