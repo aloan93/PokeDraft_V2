@@ -140,6 +140,75 @@
       }
     }
   },
+  "GET /api/leagues/:league_id/pokemon": {
+    "description": "serves an object with a key of 'total' that represents a count of all queried leaguePokemon (pokemon registered for selection in a given league) as an integer, and 'leaguePokemon' that represents all quired leaguePokemon objects in an array. Can take a query of 'sort_by' to determine how to arrange 'leaguePokemon' - valid sort_bys are 'pokemon_name'(default), 'pokedex_no' and 'speed_stat'. Can take a query of 'order' to determine if the 'sort_by' is ascending or descending - valid orders are 'asc'(default) and 'desc'. Can take a query of 'pokedex_no' to return all matching leaguePokemon varients. Can take a queries of 'type' and 'type2' to return all leaguePokemon of that include that type (if one is quired) or that match the typing combination (if two are queried). Can take a query of 'ability' to return all leaguePokemon that can have that particular ability. Can take a query of 'tier' to return all leaguePokemon within the quired tier. Can take a query of 'team' (given as an integer representing a team's id number) to return all leaguePokemon drafted into the queried team.  Can take a query of 'limit' to determine the maximum number of user objects return in the 'users' array - must be a whole, positive number (defaults to 10). Can take a query of 'page' to determine which page of queried 'users' to display in the array - must be a whole, positive number (defaults to 1)",
+    "queries": [
+      "sort_by",
+      "order",
+      "pokedex_no",
+      "type",
+      "type2",
+      "ability",
+      "tier",
+      "team",
+      "limit",
+      "page"
+    ],
+    "exampleInput": {},
+    "exampleResponse": {
+      "total": 4,
+      "pokemon": [
+        {
+          "tier": "untiered",
+          "drafted_by": null,
+          "pokemon_name": "bulbasaur",
+          "pokedex_no": 1,
+          "speed_stat": 45,
+          "type_1": "grass",
+          "type_2": "poison",
+          "ability_1": "overgrow",
+          "ability_2": "chlorophyll",
+          "ability_3": null
+        },
+        {
+          "tier": "untiered",
+          "drafted_by": null,
+          "pokemon_name": "charmander",
+          "pokedex_no": 4,
+          "speed_stat": 65,
+          "type_1": "fire",
+          "type_2": null,
+          "ability_1": "blaze",
+          "ability_2": "solar-power",
+          "ability_3": null
+        },
+        {
+          "tier": "untiered",
+          "drafted_by": null,
+          "pokemon_name": "squirtle",
+          "pokedex_no": 7,
+          "speed_stat": 43,
+          "type_1": "water",
+          "type_2": null,
+          "ability_1": "torrent",
+          "ability_2": "rain-dish",
+          "ability_3": null
+        },
+        {
+          "tier": "untiered",
+          "drafted_by": null,
+          "pokemon_name": "pikachu",
+          "pokedex_no": 25,
+          "speed_stat": 90,
+          "type_1": "electric",
+          "type_2": null,
+          "ability_1": "static",
+          "ability_2": "lightning-rod",
+          "ability_3": null
+        }
+      ]
+    }
+  },
   "POST /api/leagues": {
     "description": "posts a new league and serves that league as an object on the key of 'league'. Takes 2 mandatory properties of 'league_name' and 'owner'. 'owner' must be an integer matching an existing user's 'user_id'",
     "queries": [],
