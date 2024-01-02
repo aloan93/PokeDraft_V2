@@ -209,6 +209,25 @@
       ]
     }
   },
+  "GET /api/leagues/:league_id/pokemon/:pokemon_name": {
+    "description": "serves the requested leaguePokemon as an object on the key of 'leaguePokemon'",
+    "queries": [],
+    "exampleInput": {},
+    "exampleResponse": {
+      "leaguePokemon": {
+        "tier": "untiered",
+        "drafted_by": null,
+        "pokemon_name": "pikachu",
+        "pokedex_no": 25,
+        "speed_stat": 90,
+        "type_1": "electric",
+        "type_2": null,
+        "ability_1": "static",
+        "ability_2": "lightning-rod",
+        "ability_3": null
+      }
+    }
+  },
   "POST /api/leagues": {
     "description": "posts a new league and serves that league as an object on the key of 'league'. Takes 2 mandatory properties of 'league_name' and 'owner'. 'owner' must be an integer matching an existing user's 'user_id'",
     "queries": [],
