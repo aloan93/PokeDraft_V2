@@ -245,6 +245,22 @@
       }
     }
   },
+  "POST /api/leagues/:league_id/pokemon": {
+    "description": "posts a new leaguePokemon and serves that leaguePokemon as an object on the key of 'leaguePokemon'. Takes 1 mandatory property of 'pokemon_name'. 'pokemon_name' must be a string matching an existing pokemon's name",
+    "queries": [],
+    "exampleInput": {
+      "pokemon_name": "meowth"
+    },
+    "exampleResponse": {
+      "leaguePokemon": {
+        "leagues_pokemon_id": 8,
+        "league": 1,
+        "pokemon": "meowth",
+        "tier": "untiered",
+        "drafted_by": null
+      }
+    }
+  },
   "PATCH /api/leagues/:league_id": {
     "description": "updates the selected league via 'league_id' and serves the updated league as an object. Takes at least one property from 'league_name', 'owner' and 'notes'",
     "queries": [],
