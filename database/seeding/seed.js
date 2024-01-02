@@ -3,7 +3,10 @@ const pokemonData = require("../data/pokemon");
 
 const seed = () => {
   return database
-    .query(`DROP TABLE IF EXISTS pokemon;`)
+    .query(`DROP TABLE IF EXISTS leagues_pokemon;`)
+    .then(() => {
+      return database.query(`DROP TABLE IF EXISTS pokemon;`);
+    })
     .then(() => {
       return database.query(`DROP TABLE IF EXISTS teams;`);
     })
@@ -69,6 +72,24 @@ const seed = () => {
           ability_2 VARCHAR(30) DEFAULT null,
           ability_3 VARCHAR(30) DEFAULT null,
           PRIMARY KEY (pokemon_name)
+          )
+      `);
+    })
+    .then(() => {
+      return database.query(`
+          CREATE TABLE leagues_pokemon(
+          leagues_pokemon_id SERIAL NOT NULL,
+          league BIGINT UNSIGNED NOT NULL,
+          pokemon VARCHAR(30) NOT NULL,
+          tier VARCHAR(12) DEFAULT "untiered",
+          drafted_by BIGINT UNSIGNED DEFAULT null,
+          PRIMARY KEY (leagues_pokemon_id),
+          FOREIGN KEY (pokemon)
+            REFERENCES pokemon(pokemon_name)
+            ON DELETE CASCADE,
+          FOREIGN KEY (drafted_by)
+            REFERENCES teams(team_id)
+            ON DELETE SET null
           )
       `);
     })
