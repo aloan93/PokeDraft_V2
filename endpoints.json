@@ -279,6 +279,28 @@
       }
     }
   },
+  "PATCH /api/leagues/:league_id/pokemon/:pokemon_name": {
+    "description": "updates the selected leaguePokemon via 'league_id' and 'pokemon_name', then serves the updated leaguePokemon as an object. Takes at least one property from 'tier' or 'drafted_by'. 'tier' is a string limited to 12 characters, and 'drafted_by' is an integer that must represent the 'team_id' of a team that is participating in the provided league.",
+    "queries": [],
+    "exampleInput": {
+      "tier": "C",
+      "drafted_by": 1
+    },
+    "exampleResponse": {
+      "leaguePokemon": {
+        "tier": "C",
+        "drafted_by": 1,
+        "pokemon_name": "meowth",
+        "pokedex_no": 52,
+        "speed_stat": 90,
+        "type_1": "normal",
+        "type_2": null,
+        "ability_1": "pickup",
+        "ability_2": "technician",
+        "ability_3": "unnerve"
+      }
+    }
+  },
   "DELETE /api/leagues/:league_id": {
     "description": "deletes the selected league via 'league_id'. deleting a league will cascade down and delete any children in other data tables (eg. 'teams')",
     "queries": [],
