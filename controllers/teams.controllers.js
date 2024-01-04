@@ -35,8 +35,8 @@ exports.postTeam = (req, res, next) => {
 
 exports.patchTeamByTeamId = (req, res, next) => {
   const { team_id } = req.params;
-  const { team_name, coach, notes } = req.body;
-  return updateTeamByTeamId(team_id, team_name, coach, notes)
+  const { team_name, coach, team_image_url, notes } = req.body;
+  return updateTeamByTeamId(team_id, team_name, coach, team_image_url, notes)
     .then((team) => {
       res.status(200).send({ team });
     })

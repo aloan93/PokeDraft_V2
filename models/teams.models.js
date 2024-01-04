@@ -114,10 +114,16 @@ exports.createTeam = (team_name, coach, league) => {
     });
 };
 
-exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
+exports.updateTeamByTeamId = (
+  team_id,
+  team_name,
+  coach,
+  team_image_url,
+  notes
+) => {
   const doesTeamExist = checkTeamExists(team_id);
 
-  if (!team_name && !coach && !notes) {
+  if (!team_name && !coach && !team_image_url && !notes) {
     return Promise.reject({
       status: 400,
       message: "At least one field must be selected for update",
@@ -141,6 +147,22 @@ exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
     if (count === 0) query += ` coach = ?`;
     else query += `, coach = ?`;
     count++;
+  }
+
+  if (team_image_url) {
+    if (
+      /^(http(s?):)([%|/|.|\w|\s|-])*\.(?:jpg|gif|png)$/.test(team_image_url)
+    ) {
+      queryValues.push(team_image_url);
+      if (count === 0) query += ` team_image_url = ?`;
+      else query += `, team_image_url = ?`;
+      count++;
+    } else {
+      return Promise.reject({
+        status: 400,
+        message: "Please provide a valid jpg, gif or png URL",
+      });
+    }
   }
 
   if (notes) {
