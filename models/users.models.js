@@ -140,9 +140,18 @@ exports.updateUserByUserId = (
       }
 
       if (avatar_url) {
-        queryValues.push(avatar_url);
-        if (count === 0) query += ` avatar_url = ?`;
-        else query += `, avatar_url =?`;
+        if (
+          /^https?:\/\/(?:\w[%\.\-\/]?)+\.(?:jpg|gif|png)$/.test(avatar_url)
+        ) {
+          queryValues.push(avatar_url);
+          if (count === 0) query += ` avatar_url = ?`;
+          else query += `, avatar_url =?`;
+        } else {
+          return Promise.reject({
+            status: 400,
+            message: "Please provide a valid jpg, gif or png URL",
+          });
+        }
       }
 
       query += ` WHERE user_id = ?;`;
