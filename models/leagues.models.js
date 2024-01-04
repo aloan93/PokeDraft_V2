@@ -245,66 +245,76 @@ exports.updateLeagueByLeagueId = (
   league_image_url,
   notes
 ) => {
-  const doesLeagueExist = checkLeagueExists(league_id);
-
-  if (!league_name && !owner && !notes) {
-    return Promise.reject({
-      status: 400,
-      message: "At least one field must be selected for update",
-    });
-  }
-
-  let query = `UPDATE leagues SET`;
-  const queryValues = [];
-  let count = 0;
-
-  if (league_name) {
-    queryValues.push(league_name);
-    query += ` league_name = ?`;
-    count++;
-  }
-
-  let doesUserExist;
-  if (owner) {
-    doesUserExist = checkUserExists(owner);
-    queryValues.push(owner);
-    if (count === 0) query += ` owner = ?`;
-    else query += `, owner = ?`;
-    count++;
-  }
-
-  if (league_image_url) {
-    if (
-      /^(http(s?):)([%|/|.|\w|\s|-])*\.(?:jpg|gif|png)$/.test(league_image_url)
-    ) {
-      queryValues.push(league_image_url);
-      if (count === 0) query += ` league_image_url = ?`;
-      else query += `, league_image_url = ?`;
-      count++;
-    } else {
+  return checkLeagueExists(league_id).then(() => {
+    if (!league_name && !owner && !league_image_url && !notes) {
       return Promise.reject({
         status: 400,
-        message: "Please provide a valid jpg, gif or png URL",
+        message: "At least one field must be selected for update",
       });
     }
-  }
 
-  if (notes) {
-    queryValues.push(notes);
-    if (count === 0) query += ` notes = ?`;
-    else query += `, notes = ?`;
-  }
+    let query = `UPDATE leagues SET`;
+    const queryValues = [];
+    let count = 0;
 
-  query += ` WHERE league_id = ?;`;
-  queryValues.push(league_id);
+    if (league_name) {
+      queryValues.push(league_name);
+      query += ` league_name = ?`;
+      count++;
+    }
 
-  const finalQuery = database.query(query, queryValues);
+    if (owner) {
+      queryValues.push(owner);
+      if (count === 0) query += ` owner = ?`;
+      else query += `, owner = ?`;
+      count++;
+    }
 
-  return Promise.all([finalQuery, doesUserExist, doesLeagueExist])
-    .then(() => {
-      return this.fetchLeagueByLeagueId(league_id);
-    })
-    .then((league) => league);
+    if (league_image_url) {
+      if (
+        /^(http(s?):)([%|/|.|\w|\s|-])*\.(?:jpg|gif|png)$/.test(
+          league_image_url
+        )
+      ) {
+        queryValues.push(league_image_url);
+        if (count === 0) query += ` league_image_url = ?`;
+        else query += `, league_image_url = ?`;
+        count++;
+      } else {
+        return Promise.reject({
+          status: 400,
+          message: "Please provide a valid jpg, gif or png URL",
+        });
+      }
+    }
+
+    if (notes) {
+      queryValues.push(notes);
+      if (count === 0) query += ` notes = ?`;
+      else query += `, notes = ?`;
+    }
+
+    query += ` WHERE league_id = ?;`;
+    queryValues.push(league_id);
+
+    if (owner) {
+      return checkUserExists(owner)
+        .then(() => {
+          return database.query(query, queryValues);
+        })
+        .then(() => {
+          return this.fetchLeagueByLeagueId(league_id);
+        })
+        .then((league) => league);
+    } else {
+      return database
+        .query(query, queryValues)
+        .then(() => {
+          return this.fetchLeagueByLeagueId(league_id);
+        })
+        .then((league) => league);
+    }
+  });
 };
 
 exports.updateLeaguePokemonByLeagueIdAndPokemonName = (
