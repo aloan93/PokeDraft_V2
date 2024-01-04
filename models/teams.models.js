@@ -114,51 +114,81 @@ exports.createTeam = (team_name, coach, league) => {
     });
 };
 
-exports.updateTeamByTeamId = (team_id, team_name, coach, notes) => {
-  const doesTeamExist = checkTeamExists(team_id);
+exports.updateTeamByTeamId = (
+  team_id,
+  team_name,
+  coach,
+  team_image_url,
+  notes
+) => {
+  return checkTeamExists(team_id).then(() => {
+    if (!team_name && !coach && !team_image_url && !notes) {
+      return Promise.reject({
+        status: 400,
+        message: "At least one field must be selected for update",
+      });
+    }
 
-  if (!team_name && !coach && !notes) {
-    return Promise.reject({
-      status: 400,
-      message: "At least one field must be selected for update",
-    });
-  }
+    let query = `UPDATE teams SET`;
+    const queryValues = [];
+    let count = 0;
 
-  let query = `UPDATE teams SET`;
-  const queryValues = [];
-  let count = 0;
+    if (team_name) {
+      queryValues.push(team_name);
+      query += ` team_name = ?`;
+      count++;
+    }
 
-  if (team_name) {
-    queryValues.push(team_name);
-    query += ` team_name = ?`;
-    count++;
-  }
+    if (coach) {
+      queryValues.push(coach);
+      if (count === 0) query += ` coach = ?`;
+      else query += `, coach = ?`;
+      count++;
+    }
 
-  let doesUserExist;
-  if (coach) {
-    doesUserExist = checkUserExists(coach);
-    queryValues.push(coach);
-    if (count === 0) query += ` coach = ?`;
-    else query += `, coach = ?`;
-    count++;
-  }
+    if (team_image_url) {
+      if (
+        /^(http(s?):)([%|/|.|\w|\s|-])*\.(?:jpg|gif|png)$/.test(team_image_url)
+      ) {
+        queryValues.push(team_image_url);
+        if (count === 0) query += ` team_image_url = ?`;
+        else query += `, team_image_url = ?`;
+        count++;
+      } else {
+        return Promise.reject({
+          status: 400,
+          message: "Please provide a valid jpg, gif or png URL",
+        });
+      }
+    }
 
-  if (notes) {
-    queryValues.push(notes);
-    if (count === 0) query += ` notes = ?`;
-    else query += `, notes = ?`;
-  }
+    if (notes) {
+      queryValues.push(notes);
+      if (count === 0) query += ` notes = ?`;
+      else query += `, notes = ?`;
+    }
 
-  query += ` WHERE team_id = ?;`;
-  queryValues.push(team_id);
+    query += ` WHERE team_id = ?;`;
+    queryValues.push(team_id);
 
-  const finalQuery = database.query(query, queryValues);
-
-  return Promise.all([finalQuery, doesUserExist, doesTeamExist])
-    .then(() => {
-      return this.fetchTeamByTeamId(team_id);
-    })
-    .then((team) => team);
+    if (coach) {
+      return checkUserExists(coach)
+        .then(() => {
+          return database.query(query, queryValues);
+        })
+        .then(() => {
+          return this.fetchTeamByTeamId(team_id);
+        })
+        .then((team) => team);
+    } else {
+      return database
+        .query(query, queryValues)
+        .then(() => {
+          return this.fetchTeamByTeamId(team_id);
+        })
+        .then((team) => team);
+    }
+  });
 };
 
 exports.removeTeamByTeamId = (team_id) => {

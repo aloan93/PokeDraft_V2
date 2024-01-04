@@ -95,8 +95,14 @@ exports.postLeaguePokemon = (req, res, next) => {
 
 exports.patchLeagueByLeagueId = (req, res, next) => {
   const { league_id } = req.params;
-  const { league_name, owner, notes } = req.body;
-  return updateLeagueByLeagueId(league_id, league_name, owner, notes)
+  const { league_name, owner, league_image_url, notes } = req.body;
+  return updateLeagueByLeagueId(
+    league_id,
+    league_name,
+    owner,
+    league_image_url,
+    notes
+  )
     .then((league) => {
       res.status(200).send({ league });
     })
