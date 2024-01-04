@@ -238,7 +238,13 @@ exports.createLeaguePokemon = (league_id, pokemon_name) => {
     });
 };
 
-exports.updateLeagueByLeagueId = (league_id, league_name, owner, notes) => {
+exports.updateLeagueByLeagueId = (
+  league_id,
+  league_name,
+  owner,
+  league_image_url,
+  notes
+) => {
   const doesLeagueExist = checkLeagueExists(league_id);
 
   if (!league_name && !owner && !notes) {
@@ -265,6 +271,22 @@ exports.updateLeagueByLeagueId = (league_id, league_name, owner, notes) => {
     if (count === 0) query += ` owner = ?`;
     else query += `, owner = ?`;
     count++;
+  }
+
+  if (league_image_url) {
+    if (
+      /^(http(s?):)([%|/|.|\w|\s|-])*\.(?:jpg|gif|png)$/.test(league_image_url)
+    ) {
+      queryValues.push(league_image_url);
+      if (count === 0) query += ` league_image_url = ?`;
+      else query += `, league_image_url = ?`;
+      count++;
+    } else {
+      return Promise.reject({
+        status: 400,
+        message: "Please provide a valid jpg, gif or png URL",
+      });
+    }
   }
 
   if (notes) {
