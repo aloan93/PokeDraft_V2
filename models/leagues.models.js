@@ -272,9 +272,7 @@ exports.updateLeagueByLeagueId = (
 
     if (league_image_url) {
       if (
-        /^(http(s?):)([%|/|.|\w|\s|-])*\.(?:jpg|gif|png)$/.test(
-          league_image_url
-        )
+        /^https?:\/\/(?:\w[%\.\-\/]?)+\.(?:jpg|gif|png)$/.test(league_image_url)
       ) {
         queryValues.push(league_image_url);
         if (count === 0) query += ` league_image_url = ?`;
