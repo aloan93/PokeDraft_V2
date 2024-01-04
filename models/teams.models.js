@@ -148,7 +148,7 @@ exports.updateTeamByTeamId = (
 
     if (team_image_url) {
       if (
-        /^(http(s?):)([%|/|.|\w|\s|-])*\.(?:jpg|gif|png)$/.test(team_image_url)
+        /^https?:\/\/(?:\w[%\.\-\/]?)+\.(?:jpg|gif|png)$/.test(team_image_url)
       ) {
         queryValues.push(team_image_url);
         if (count === 0) query += ` team_image_url = ?`;
