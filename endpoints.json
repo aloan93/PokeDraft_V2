@@ -339,6 +339,7 @@
           "team_name": "test_team1",
           "coach": 1,
           "league": 1,
+          "team_image_url": "https://www.shutterstock.com/image-illustration/no-picture-available-placeholder-thumbnail-600nw-2179364083.jpg",
           "notes": null,
           "created_at": "2020-01-01T12:00:00.000Z"
         },
@@ -347,6 +348,7 @@
           "team_name": "test_team2",
           "coach": 2,
           "league": 5,
+          "team_image_url": "https://www.shutterstock.com/image-illustration/no-picture-available-placeholder-thumbnail-600nw-2179364083.jpg",
           "notes": "team notes example",
           "created_at": "2020-01-01T12:00:00.000Z"
         }
@@ -363,6 +365,7 @@
         "team_name": "test_team1",
         "coach": 1,
         "league": 1,
+        "team_image_url": "https://www.shutterstock.com/image-illustration/no-picture-available-placeholder-thumbnail-600nw-2179364083.jpg",
         "notes": null,
         "created_at": "2020-01-01T12:00:00.000Z"
       }
@@ -382,17 +385,19 @@
         "team_name": "test_team3",
         "coach": 4,
         "league": 5,
+        "team_image_url": "https://www.shutterstock.com/image-illustration/no-picture-available-placeholder-thumbnail-600nw-2179364083.jpg",
         "notes": null,
         "created_at": "2020-01-01T12:00:00.000Z"
       }
     }
   },
   "PATCH /api/teams/:team_id": {
-    "description": "updates the selected team via 'team_id' and serves the updated team as an object. Takes at least one property from 'team_name', 'coach' and 'notes'",
+    "description": "updates the selected team via 'team_id' and serves the updated team as an object. Takes at least one property from 'team_name', 'coach', 'team_image_url' and 'notes'",
     "queries": [],
     "exampleInput": {
       "team_name": "patched_team_name",
       "coach": 3,
+      "team_image_url": "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_2x3.jpg",
       "notes": "patched_notes"
     },
     "exampleResponse": {
@@ -401,6 +406,7 @@
         "team_name": "patched_team_name",
         "coach": 3,
         "league": 5,
+        "team_image_url": "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_2x3.jpg",
         "notes": "patched_notes",
         "created_at": "2020-01-01T12:00:00.000Z"
       }
