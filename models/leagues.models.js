@@ -95,6 +95,7 @@ exports.fetchLeaguePokemonByLeagueId = (
     pokemon_name: "pokemon_name",
     pokedex_no: "pokedex_no",
     speed_stat: "speed_stat",
+    drafted_at: "drafted_at",
   };
 
   if (!validSortBys[sort_by]) {
@@ -112,7 +113,7 @@ exports.fetchLeaguePokemonByLeagueId = (
     });
   }
 
-  let query = `SELECT leagues_pokemon.tier, leagues_pokemon.drafted_by, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name WHERE league = ? `;
+  let query = `SELECT leagues_pokemon.tier, leagues_pokemon.drafted_by, teams.team_name, users.username, users.user_id, leagues_pokemon.drafted_at, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon LEFT JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name LEFT JOIN teams ON leagues_pokemon.drafted_by = teams.team_id LEFT JOIN users ON teams.coach = users.user_id WHERE leagues_pokemon.league = ? `;
 
   const queryValues = [league_id];
   if (pokedex_no) {
@@ -166,8 +167,8 @@ exports.fetchLeaguePokemonByLeagueId = (
   const doesLeagueExist = checkLeagueExists(league_id);
 
   return Promise.all([totalQuery, leaguePokemonQuery, doesLeagueExist]).then(
-    ([total, pokemon]) => {
-      return { total, pokemon };
+    ([total, leaguePokemon]) => {
+      return { total, leaguePokemon };
     }
   );
 };
@@ -181,7 +182,7 @@ exports.fetchSingleLeaguePokemonByLeagueIdAndPokemonName = (
   const doesPokemonExist = checkPokemonExists(pokemon_name);
 
   const query = database.query(
-    `SELECT leagues_pokemon.tier, leagues_pokemon.drafted_by, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name WHERE league = ? AND pokemon = ?;`,
+    `SELECT leagues_pokemon.tier, leagues_pokemon.drafted_by, teams.team_name, users.username, users.user_id, leagues_pokemon.drafted_at, pokemon.pokemon_name, pokemon.pokedex_no, pokemon.speed_stat, pokemon.type_1, pokemon.type_2, pokemon.ability_1, pokemon.ability_2, pokemon.ability_3 FROM leagues_pokemon LEFT JOIN pokemon ON leagues_pokemon.pokemon = pokemon.pokemon_name LEFT JOIN teams ON leagues_pokemon.drafted_by = teams.team_id LEFT JOIN users ON teams.coach = users.user_id WHERE leagues_pokemon.league = ? AND leagues_pokemon.pokemon = ?;`,
     [league_id, pokemon_name]
   );
 
@@ -345,8 +346,9 @@ exports.updateLeaguePokemonByLeagueIdAndPokemonName = (
 
       if (drafted_by) {
         queryValues.push(drafted_by);
-        if (count === 0) query += ` drafted_by = ?`;
-        else query += `, drafted_by = ?`;
+        if (count === 0)
+          query += ` drafted_by = ?, drafted_at = CURRENT_TIMESTAMP`;
+        else query += `, drafted_by = ?, drafted_at = CURRENT_TIMESTAMP`;
       }
 
       query += ` WHERE league = ? AND pokemon = ?;`;

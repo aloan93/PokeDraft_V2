@@ -85,6 +85,7 @@ const seed = () => {
           pokemon VARCHAR(30) NOT NULL,
           tier VARCHAR(12) DEFAULT "untiered",
           drafted_by BIGINT UNSIGNED DEFAULT null,
+          drafted_at DATETIME DEFAULT null,
           PRIMARY KEY (leagues_pokemon_id),
           FOREIGN KEY (pokemon)
             REFERENCES pokemon(pokemon_name)

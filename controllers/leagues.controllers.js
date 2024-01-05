@@ -56,8 +56,8 @@ exports.getLeaguePokemonByLeagueId = (req, res, next) => {
     limit,
     page
   )
-    .then(({ total, pokemon }) => {
-      res.status(200).send({ total, pokemon });
+    .then(({ total, leaguePokemon }) => {
+      res.status(200).send({ total, leaguePokemon });
     })
     .catch((err) => next(err));
 };
