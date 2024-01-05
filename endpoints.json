@@ -164,6 +164,7 @@
         {
           "tier": "untiered",
           "drafted_by": null,
+          "drafted_at": null,
           "pokemon_name": "bulbasaur",
           "pokedex_no": 1,
           "speed_stat": 45,
@@ -176,6 +177,7 @@
         {
           "tier": "untiered",
           "drafted_by": null,
+          "drafted_at": null,
           "pokemon_name": "charmander",
           "pokedex_no": 4,
           "speed_stat": 65,
@@ -188,6 +190,7 @@
         {
           "tier": "untiered",
           "drafted_by": null,
+          "drafted_at": null,
           "pokemon_name": "squirtle",
           "pokedex_no": 7,
           "speed_stat": 43,
@@ -200,6 +203,7 @@
         {
           "tier": "untiered",
           "drafted_by": null,
+          "drafted_at": null,
           "pokemon_name": "pikachu",
           "pokedex_no": 25,
           "speed_stat": 90,
@@ -220,6 +224,7 @@
       "leaguePokemon": {
         "tier": "untiered",
         "drafted_by": null,
+        "drafted_at": null,
         "pokemon_name": "pikachu",
         "pokedex_no": 25,
         "speed_stat": 90,
@@ -261,7 +266,8 @@
         "league": 1,
         "pokemon": "meowth",
         "tier": "untiered",
-        "drafted_by": null
+        "drafted_by": null,
+        "drafted_at": null
       }
     }
   },
@@ -296,6 +302,7 @@
       "leaguePokemon": {
         "tier": "C",
         "drafted_by": 1,
+        "drafted_at": "2024-01-05T16:39:07.000Z",
         "pokemon_name": "meowth",
         "pokedex_no": 52,
         "speed_stat": 90,
