@@ -95,6 +95,7 @@ exports.fetchLeaguePokemonByLeagueId = (
     pokemon_name: "pokemon_name",
     pokedex_no: "pokedex_no",
     speed_stat: "speed_stat",
+    drafted_at: "drafted_at",
   };
 
   if (!validSortBys[sort_by]) {
