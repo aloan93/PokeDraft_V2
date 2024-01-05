@@ -160,7 +160,7 @@
     "exampleInput": {},
     "exampleResponse": {
       "total": 4,
-      "pokemon": [
+      "leaguePokemon": [
         {
           "tier": "untiered",
           "drafted_by": null,

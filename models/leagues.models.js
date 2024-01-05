@@ -166,8 +166,8 @@ exports.fetchLeaguePokemonByLeagueId = (
   const doesLeagueExist = checkLeagueExists(league_id);
 
   return Promise.all([totalQuery, leaguePokemonQuery, doesLeagueExist]).then(
-    ([total, pokemon]) => {
-      return { total, pokemon };
+    ([total, leaguePokemon]) => {
+      return { total, leaguePokemon };
     }
   );
 };
