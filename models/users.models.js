@@ -26,7 +26,7 @@ exports.fetchUsers = (
     });
   }
 
-  let query = `SELECT * FROM users `;
+  let query = `SELECT user_id, username, email, avatar_url, join_date FROM users `;
 
   const queryValues = [];
   if (username) {
@@ -53,9 +53,10 @@ exports.fetchUsers = (
 
 exports.fetchUserByUserId = (user_id) => {
   const doesUserExist = checkUserExists(user_id);
-  const query = database.query(`SELECT * FROM users WHERE user_id=?;`, [
-    user_id,
-  ]);
+  const query = database.query(
+    `SELECT user_id, username, email, avatar_url, join_date FROM users WHERE user_id=?;`,
+    [user_id]
+  );
   return Promise.all([query, doesUserExist]).then((results) => {
     return results[0][0][0];
   });
@@ -83,7 +84,7 @@ exports.createUser = (username, email, password) => {
     })
     .then(() => {
       return database.query(
-        `SELECT * FROM users WHERE user_id = LAST_INSERT_ID()`
+        `SELECT user_id, username, email, avatar_url, join_date FROM users WHERE user_id = LAST_INSERT_ID()`
       );
     })
     .then((result) => {

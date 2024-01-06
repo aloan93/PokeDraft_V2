@@ -13,7 +13,6 @@
           "user_id": 1,
           "username": "testuser1",
           "email": "test1@test.com",
-          "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
           "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
           "join_date": "2020-01-01T12:00:00.000Z"
         },
@@ -21,7 +20,6 @@
           "user_id": 2,
           "username": "testuser2",
           "email": "test2@test.com",
-          "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
           "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
           "join_date": "2020-02-14T12:00:00.000Z"
         }
@@ -37,14 +35,13 @@
         "user_id": 1,
         "username": "testuser1",
         "email": "test1@test.com",
-        "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
         "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
         "join_date": "2020-01-01T12:00:00.000Z"
       }
     }
   },
   "POST /api/users": {
-    "description": "posts a new user and serves that user as an object on the key of 'user'. Takes 3 mandatory properties of 'username', 'email' and 'password'",
+    "description": "posts a new user and serves that user as an object on the key of 'user'. Takes 3 mandatory properties of 'username', 'email' and 'password'. 'password' is encrypted but not returned in the response",
     "queries": [],
     "exampleInput": {
       "username": "testuser1",
@@ -56,7 +53,6 @@
         "user_id": 1,
         "username": "testuser1",
         "email": "test1@test.com",
-        "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
         "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
         "join_date": "2020-01-01T12:00:00.000Z"
       }
@@ -77,7 +73,7 @@
     }
   },
   "PATCH /api/users/:user_id": {
-    "description": "updates the selected user via 'user_id' and serves the updated user as an object. Takes at least one property from 'username', 'email', 'password' and 'avatar_url'",
+    "description": "updates the selected user via 'user_id' and serves the updated user as an object. Takes at least one property from 'username', 'email', 'password' and 'avatar_url'. 'password' is not returned in the response - even if updated",
     "queries": [],
     "exampleInput": {
       "username": "patched_username",
@@ -90,7 +86,6 @@
         "user_id": 1,
         "username": "patched_username",
         "email": "patched@email.com",
-        "password": "$2b$10$6/TzQ48/7IZVauDwYMw4/.K.1OhZkxyPOvbC/FOq.hjmyOOEgKpQW",
         "avatar_url": "https://patched.com/new_image.png",
         "join_date": "2020-01-01T12:00:00.000Z"
       }
