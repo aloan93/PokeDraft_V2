@@ -33,7 +33,7 @@ exports.fetchLeagues = (
     });
   }
 
-  let query = `SELECT * FROM leagues `;
+  let query = `SELECT leagues.league_id, leagues.league_name, leagues.owner, users.username, leagues.league_image_url, leagues.notes, leagues.created_at FROM leagues LEFT JOIN users ON users.user_id = leagues.owner `;
 
   const queryValues = [];
   let count = 0;
@@ -69,9 +69,10 @@ exports.fetchLeagues = (
 exports.fetchLeagueByLeagueId = (league_id) => {
   const doesLeagueExist = checkLeagueExists(league_id);
 
-  const query = database.query(`SELECT * FROM leagues WHERE league_id=?`, [
-    league_id,
-  ]);
+  const query = database.query(
+    `SELECT leagues.league_id, leagues.league_name, leagues.owner, users.username, leagues.league_image_url, leagues.notes, leagues.created_at FROM leagues LEFT JOIN users ON users.user_id = leagues.owner WHERE leagues.league_id=?`,
+    [league_id]
+  );
 
   return Promise.all([query, doesLeagueExist]).then((results) => {
     return results[0][0][0];
@@ -210,7 +211,7 @@ exports.createLeague = (league_name, owner) => {
   return Promise.all([doesUserExist, query])
     .then(() => {
       return database.query(
-        `SELECT * FROM leagues WHERE league_id = LAST_INSERT_ID();`
+        `SELECT leagues.league_id, leagues.league_name, leagues.owner, users.username, leagues.league_image_url, leagues.notes, leagues.created_at FROM leagues LEFT JOIN users ON users.user_id = leagues.owner WHERE league_id = LAST_INSERT_ID();`
       );
     })
     .then((result) => {
