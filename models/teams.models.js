@@ -73,9 +73,10 @@ exports.fetchTeams = (
 
 exports.fetchTeamByTeamId = (team_id) => {
   const doesTeamExist = checkTeamExists(team_id);
-  const query = database.query(`SELECT * FROM teams WHERE team_id = ?;`, [
-    team_id,
-  ]);
+  const query = database.query(
+    `SELECT teams.team_id, teams.team_name, teams.coach, users.username, teams.league, leagues.league_name, teams.team_image_url, teams.notes, teams.created_at, COUNT(leagues_pokemon_id) AS pokemon_count FROM teams LEFT JOIN users ON users.user_id = teams.coach LEFT JOIN leagues ON leagues.league_id = teams.league LEFT JOIN leagues_pokemon ON leagues_pokemon.drafted_by = teams.team_id WHERE team_id = ? GROUP BY teams.team_id;`,
+    [team_id]
+  );
   return Promise.all([query, doesTeamExist]).then((results) => {
     return results[0][0][0];
   });
@@ -106,7 +107,7 @@ exports.createTeam = (team_name, coach, league) => {
     })
     .then(() => {
       return database.query(
-        `SELECT * FROM teams WHERE team_id = LAST_INSERT_ID();`
+        `SELECT teams.team_id, teams.team_name, teams.coach, users.username, teams.league, leagues.league_name, teams.team_image_url, teams.notes, teams.created_at FROM teams LEFT JOIN users ON users.user_id = teams.coach LEFT JOIN leagues ON leagues.league_id = teams.league WHERE teams.team_id = LAST_INSERT_ID();`
       );
     })
     .then((result) => {
