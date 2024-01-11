@@ -14,7 +14,11 @@ exports.fetchTeams = (
   limit = 10,
   page = 1
 ) => {
-  const validSortBys = { created_at: "created_at", team_name: "team_name" };
+  const validSortBys = {
+    created_at: "created_at",
+    team_name: "team_name",
+    pokemon_count: "pokemon_count",
+  };
 
   if (!validSortBys[sort_by]) {
     return Promise.reject({ status: 400, message: "Invalid sort_by" });

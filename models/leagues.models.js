@@ -16,7 +16,11 @@ exports.fetchLeagues = (
   limit = 10,
   page = 1
 ) => {
-  const validSortBys = { created_at: "created_at", league_name: "league_name" };
+  const validSortBys = {
+    created_at: "created_at",
+    league_name: "league_name",
+    teams_count: "teams_count",
+  };
 
   if (!validSortBys[sort_by]) {
     return Promise.reject({ status: 400, message: "Invalid sort_by" });
