@@ -31,30 +31,30 @@ exports.fetchTeams = (
     });
   }
 
-  let query = `SELECT * FROM teams `;
+  let query = `SELECT teams.team_id, teams.team_name, teams.coach, users.username, teams.league, leagues.league_name, teams.team_image_url, teams.notes, teams.created_at, COUNT(leagues_pokemon_id) AS pokemon_count FROM teams LEFT JOIN users ON users.user_id = teams.coach LEFT JOIN leagues ON leagues.league_id = teams.league LEFT JOIN leagues_pokemon ON leagues_pokemon.drafted_by = teams.team_id `;
 
   const queryValues = [];
   let count = 0;
   if (team_name) {
     queryValues.push(team_name);
-    query += `WHERE team_name = ? `;
+    query += `WHERE teams.team_name = ? `;
     count++;
   }
 
   if (coach) {
     queryValues.push(coach);
-    if (count === 0) query += `WHERE coach = ? `;
+    if (count === 0) query += `WHERE teams.coach = ? `;
     else query += `AND coach = ? `;
     count++;
   }
 
   if (league) {
     queryValues.push(league);
-    if (count === 0) query += `WHERE league = ? `;
+    if (count === 0) query += `WHERE teams.league = ? `;
     else query += `AND league = ? `;
   }
 
-  query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
+  query += `GROUP BY teams.team_id ORDER BY ${validSortBys[sort_by]} ${order} `;
 
   const totalQuery = database.query(query, queryValues).then((result) => {
     return result[0].length;
