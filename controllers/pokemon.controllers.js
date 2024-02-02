@@ -16,7 +16,7 @@ exports.getPokemon = (req, res, next) => {
     limit,
     page
   )
-    .then((total, pokemon) => {
+    .then(({ total, pokemon }) => {
       res.status(200).send({ total, pokemon });
     })
     .catch((err) => next(err));

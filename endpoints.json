@@ -476,7 +476,7 @@
     "exampleInput": {},
     "exampleResponse": {
       "total": 2,
-      "users": [
+      "pokemon": [
         {
           "pokemon_name": "scovillain",
           "pokedex_no": 952,
