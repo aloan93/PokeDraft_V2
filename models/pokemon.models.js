@@ -67,7 +67,9 @@ exports.fetchPokemon = (
     else query += `AND (ability_1 = ? OR ability_2 = ? OR ability_3 = ?) `;
   }
 
-  query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
+  query += `ORDER BY ${validSortBys[sort_by]}${
+    validSortBys[sort_by] !== "pokemon_name" ? ", pokemon_name" : ""
+  } ${order} `;
 
   const totalQuery = database.query(query, queryValues).then((result) => {
     return result[0].length;
