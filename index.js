@@ -10,6 +10,8 @@ app.use(cors());
 
 app.use("/api", apiRouter);
 
+// customer errors
+
 app.use((err, req, res, next) => {
   if (err.status) {
     res.status(err.status).send({ message: err.message });
@@ -17,6 +19,18 @@ app.use((err, req, res, next) => {
   }
   next(err);
 });
+
+// sql errors
+
+app.use((err, req, res, next) => {
+  if (err.code === "ER_DUP_ENTRY") {
+    res.status(400).send({ message: "Duplicate Entry" });
+    return;
+  }
+  next(err);
+});
+
+// failsafe
 
 app.use((err, req, res, next) => {
   console.log(err);
