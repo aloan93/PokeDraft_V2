@@ -2,7 +2,6 @@ const {
   fetchUsers,
   fetchUserByUserId,
   createUser,
-  createUserLogin,
   updateUserByUserId,
   removeUserByUserId,
 } = require("../models/users.models");
@@ -30,15 +29,6 @@ exports.postUser = (req, res, next) => {
   return createUser(username, email, password)
     .then((user) => {
       res.status(201).send({ user });
-    })
-    .catch((err) => next(err));
-};
-
-exports.postUserLogin = (req, res, next) => {
-  const { username, password } = req.body;
-  return createUserLogin(username, password)
-    .then(({ accessToken }) => {
-      res.json({ accessToken });
     })
     .catch((err) => next(err));
 };
