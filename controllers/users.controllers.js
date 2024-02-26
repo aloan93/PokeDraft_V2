@@ -37,8 +37,8 @@ exports.postUser = (req, res, next) => {
 exports.postUserLogin = (req, res, next) => {
   const { username, password } = req.body;
   return createUserLogin(username, password)
-    .then(({ status, message }) => {
-      res.status(status).send({ message });
+    .then(({ accessToken }) => {
+      res.json({ accessToken });
     })
     .catch((err) => next(err));
 };
