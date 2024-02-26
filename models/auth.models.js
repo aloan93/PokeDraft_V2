@@ -1,7 +1,6 @@
 require("dotenv").config({ path: `${__dirname}/../.env` });
 const database = require("../database/connection");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 exports.loginModel = (username, password) => {
   return database
@@ -20,9 +19,7 @@ exports.loginModel = (username, password) => {
         });
       else {
         const user = { name: username };
-        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-        //const refreshToken = generateRefreshToken({ user: username });
-        return { accessToken };
+        return user;
       }
     });
 };

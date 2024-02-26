@@ -10,7 +10,12 @@ exports.getUsers = (req, res, next) => {
   const { sort_by, order, username, limit, page } = req.query;
   return fetchUsers(sort_by, order, username, limit, page)
     .then(({ total, users }) => {
-      res.status(200).send({ total, users });
+      res
+        .status(200)
+        .send({
+          total,
+          users: users.filter((u) => u.username === req.user.name),
+        });
     })
     .catch((err) => next(err));
 };
