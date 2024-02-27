@@ -1,37 +1,32 @@
-const { loginModel } = require("../models/auth.models");
-const jwt = require("jsonwebtoken");
+const {
+  loginModel,
+  tokenModel,
+  logoutModel,
+} = require("../models/auth.models");
 
 exports.loginController = (req, res, next) => {
   const { username, password } = req.body;
   return loginModel(username, password)
-    .then((user) => {
-      const accessToken = generateAccessToken(user);
-      const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-      refreshTokens.push(refreshToken);
+    .then(({ accessToken, refreshToken }) => {
       res.json({ accessToken, refreshToken });
     })
     .catch((err) => next(err));
 };
 
-let refreshTokens = [];
-
 exports.tokenController = (req, res, next) => {
-  const refreshToken = req.body.token;
-  if (!refreshToken) return res.sendStatus(401);
-  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
-
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    const accessToken = generateAccessToken({ name: user.name });
-    res.json({ accessToken });
-  });
+  const { user_id, token } = req.body;
+  return tokenModel(user_id, token)
+    .then(({ accessToken }) => {
+      res.json({ accessToken });
+    })
+    .catch((err) => next(err));
 };
 
 exports.logoutController = (req, res, next) => {
-  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
-  res.sendStatus(204);
+  const { user_id } = req.body;
+  return logoutModel(user_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => next(err));
 };
-
-function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20s" });
-}
