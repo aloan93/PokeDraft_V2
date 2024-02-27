@@ -1,4 +1,35 @@
 {
+  "POST /login": {
+    "description": "Takes 2 mandatory properties of 'username' and 'password', and serves both an 'accessToken' and 'refreshToken' so long as the supplied password matchs the user's password",
+    "queries": [],
+    "exampleInput": {
+      "username": "testuser1",
+      "password": "securepassword"
+    },
+    "exampleResponse": {
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzMsImV4cCI6MTcwOTA2NTU5M30.YJYbOivlwWqWI_A0AipjrFGygsEgG30qUUY1yYd_Q0k",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzN9.YkCWMyJ59dmKT7cxwGL9iIDHJK8Rsa5mDZx038tWly8"
+    }
+  },
+  "POST /token": {
+    "description": "Takes 2 mandatory properties of 'user_id' and 'token' (a refresh token). Serves up a new 'accessToken' for the user (indicated via the 'user_id') so long as the supplied token matches the refresh token associated to the user",
+    "queries": [],
+    "exampleInput": {
+      "user_id": 1,
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzN9.YkCWMyJ59dmKT7cxwGL9iIDHJK8Rsa5mDZx038tWly8"
+    },
+    "exampleResponse": {
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzMsImV4cCI6MTcwOTA2NTU5M30.YJYbOivlwWqWI_A0AipjrFGygsEgG30qUU1newtoken"
+    }
+  },
+  "DELETE /logout": {
+    "description": "Takes 1 mandatory property of 'user_id' and replaces the refresh token stored against the user with 'null'",
+    "queries": [],
+    "exampleInput": {
+      "user_id": 1
+    },
+    "exampleResponse": null
+  },
   "GET /api": {
     "description": "serves up a json representation of all the available endpoints of the api"
   },
@@ -56,20 +87,6 @@
         "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
         "join_date": "2020-01-01T12:00:00.000Z"
       }
-    }
-  },
-  "POST /api/users/login": {
-    "description": "Takes 2 mandatory properties of 'username' and 'password', and serves a message either to authorise or deny a login attempt based on the provided password matching the provided user's password",
-    "queries": [],
-    "exampleInput": {
-      "username": "testuser1",
-      "password": "securepassword"
-    },
-    "exampleResponse": {
-      "message": "Successfully logged in"
-    },
-    "exampleResponse2": {
-      "message": "Password is incorrect"
     }
   },
   "PATCH /api/users/:user_id": {
