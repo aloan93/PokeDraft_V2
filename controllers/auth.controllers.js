@@ -23,8 +23,8 @@ exports.tokenController = (req, res, next) => {
 };
 
 exports.logoutController = (req, res, next) => {
-  const { user_id } = req.body;
-  return logoutModel(user_id)
+  const { user_id, token } = req.body;
+  return logoutModel(user_id, token)
     .then(() => {
       res.sendStatus(204);
     })

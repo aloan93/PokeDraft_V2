@@ -5,6 +5,9 @@ const seed = () => {
   return database
     .query(`DROP EVENT IF EXISTS auto_delete_expired_tokens;`)
     .then(() => {
+      return database.query(`DROP TABLE IF EXISTS tokens;`);
+    })
+    .then(() => {
       return database.query(`DROP TABLE IF EXISTS leagues_pokemon;`);
     })
     .then(() => {
@@ -28,8 +31,6 @@ const seed = () => {
           password VARCHAR(72) NOT NULL,
           avatar_url VARCHAR(1000) DEFAULT "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
           join_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-          token VARCHAR(1000) DEFAULT null,
-          token_expiry DATETIME DEFAULT null,
           PRIMARY KEY (user_id)
           )`);
     })
@@ -102,6 +103,21 @@ const seed = () => {
       `);
     })
     .then(() => {
+      return database.query(`
+          CREATE TABLE tokens(
+          token_id SERIAL NOT NULL,
+          token VARCHAR(72) NOT NULL,
+          issued_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          expires_at DATETIME NOT NULL,
+          user BIGINT UNSIGNED NOT NULL,
+          PRIMARY KEY (token),
+          FOREIGN KEY (user)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE
+          )
+      `);
+    })
+    .then(() => {
       const formattedPokemonData = pokemonData.map(
         ({
           name,
@@ -130,12 +146,12 @@ const seed = () => {
     })
     .then(() => {
       return database.query(`
-        CREATE EVENT auto_delete_expired_tokens
-        ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 HOUR
-        ON COMPLETION PRESERVE
-        DO
-        UPDATE users SET token = null, token_expiry = null
-        WHERE token_expiry < CURRENT_TIMESTAMP;
+          CREATE EVENT auto_delete_expired_tokens
+          ON SCHEDULE EVERY 1 HOUR
+          STARTS CURRENT_TIMESTAMP
+          DO
+          DELETE FROM tokens
+          WHERE expires_at < CURRENT_TIMESTAMP;
       `);
     })
     .catch((err) => console.log(err));
