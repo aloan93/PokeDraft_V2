@@ -4,6 +4,7 @@ const {
   loginController,
   tokenController,
   logoutController,
+  logoutAllController,
 } = require("./controllers/auth.controllers");
 
 const app = express();
@@ -14,6 +15,8 @@ app.post("/login", loginController);
 app.post("/token", tokenController);
 
 app.delete("/logout", logoutController);
+
+app.delete("/logoutAll", logoutAllController);
 
 // customer errors
 

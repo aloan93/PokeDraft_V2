@@ -111,6 +111,15 @@ exports.logoutModel = (user_id, token) => {
   });
 };
 
+exports.logoutAllModel = (user_id) => {
+  if (!user_id)
+    return Promise.reject({ status: 400, message: "No user_id supplied" });
+
+  return checkUserExists(user_id).then(() => {
+    return database.query(`DELETE FROM tokens WHERE user = ?;`, [user_id]);
+  });
+};
+
 function generateAccessToken(user) {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
 }

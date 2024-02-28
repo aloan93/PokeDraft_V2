@@ -2,6 +2,7 @@ const {
   loginModel,
   tokenModel,
   logoutModel,
+  logoutAllModel,
 } = require("../models/auth.models");
 
 exports.loginController = (req, res, next) => {
@@ -25,6 +26,15 @@ exports.tokenController = (req, res, next) => {
 exports.logoutController = (req, res, next) => {
   const { user_id, token } = req.body;
   return logoutModel(user_id, token)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => next(err));
+};
+
+exports.logoutAllController = (req, res, next) => {
+  const { user_id } = req.body;
+  return logoutAllModel(user_id)
     .then(() => {
       res.sendStatus(204);
     })
