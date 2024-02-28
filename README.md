@@ -63,13 +63,19 @@ npm run seed
 
 ### Step 4: Accessing the API and database admin
 
-You can start the application by running the following command:
+You can start the core API server by running the following command:
 
 ```
 npm start
 ```
 
-Once running you will be able to access the API at http://localhost:9000
+You can now start the authentication server in a seperate terminal by running the following command:
+
+```
+npm run startAuth
+```
+
+Once both are running you will be able to access the core API at http://localhost:9000 and the authentication server at http://localhost:9001
 
 You can also access the Adminer for logging into the database at http://localhost:8080
 

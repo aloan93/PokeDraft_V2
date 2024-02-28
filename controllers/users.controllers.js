@@ -2,7 +2,6 @@ const {
   fetchUsers,
   fetchUserByUserId,
   createUser,
-  createUserLogin,
   updateUserByUserId,
   removeUserByUserId,
 } = require("../models/users.models");
@@ -11,7 +10,12 @@ exports.getUsers = (req, res, next) => {
   const { sort_by, order, username, limit, page } = req.query;
   return fetchUsers(sort_by, order, username, limit, page)
     .then(({ total, users }) => {
-      res.status(200).send({ total, users });
+      res
+        .status(200)
+        .send({
+          total,
+          users: users.filter((u) => u.username === req.user.name),
+        });
     })
     .catch((err) => next(err));
 };
@@ -30,15 +34,6 @@ exports.postUser = (req, res, next) => {
   return createUser(username, email, password)
     .then((user) => {
       res.status(201).send({ user });
-    })
-    .catch((err) => next(err));
-};
-
-exports.postUserLogin = (req, res, next) => {
-  const { username, password } = req.body;
-  return createUserLogin(username, password)
-    .then(({ status, message }) => {
-      res.status(status).send({ message });
     })
     .catch((err) => next(err));
 };

@@ -3,18 +3,16 @@ const {
   getUsers,
   getUserByUserId,
   postUser,
-  postUserLogin,
   patchUserByUserId,
   deleteUserByUserId,
 } = require("../controllers/users.controllers");
+const { authenticateToken } = require("../middleware");
 
-usersRouter.get("/", getUsers);
+usersRouter.get("/", authenticateToken, getUsers);
 
 usersRouter.get("/:user_id", getUserByUserId);
 
 usersRouter.post("/", postUser);
-
-usersRouter.post("/login", postUserLogin);
 
 usersRouter.patch("/:user_id", patchUserByUserId);
 

@@ -3,7 +3,13 @@ const pokemonData = require("../data/pokemon");
 
 const seed = () => {
   return database
-    .query(`DROP TABLE IF EXISTS leagues_pokemon;`)
+    .query(`DROP EVENT IF EXISTS auto_delete_expired_tokens;`)
+    .then(() => {
+      return database.query(`DROP TABLE IF EXISTS tokens;`);
+    })
+    .then(() => {
+      return database.query(`DROP TABLE IF EXISTS leagues_pokemon;`);
+    })
     .then(() => {
       return database.query(`DROP TABLE IF EXISTS pokemon;`);
     })
@@ -97,6 +103,21 @@ const seed = () => {
       `);
     })
     .then(() => {
+      return database.query(`
+          CREATE TABLE tokens(
+          token_id SERIAL NOT NULL,
+          token VARCHAR(72) NOT NULL,
+          issued_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          expires_at DATETIME NOT NULL,
+          user BIGINT UNSIGNED NOT NULL,
+          PRIMARY KEY (token),
+          FOREIGN KEY (user)
+            REFERENCES users(user_id)
+            ON DELETE CASCADE
+          )
+      `);
+    })
+    .then(() => {
       const formattedPokemonData = pokemonData.map(
         ({
           name,
@@ -122,6 +143,16 @@ const seed = () => {
       const query = `INSERT INTO pokemon (pokemon_name, pokedex_no, speed_stat, type_1, type_2, ability_1, ability_2, ability_3) VALUES ?;`;
 
       return database.query(query, [formattedPokemonData]);
+    })
+    .then(() => {
+      return database.query(`
+          CREATE EVENT auto_delete_expired_tokens
+          ON SCHEDULE EVERY 1 HOUR
+          STARTS CURRENT_TIMESTAMP
+          DO
+          DELETE FROM tokens
+          WHERE expires_at < CURRENT_TIMESTAMP;
+      `);
     })
     .catch((err) => console.log(err));
 };
