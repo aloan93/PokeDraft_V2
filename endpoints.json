@@ -23,7 +23,16 @@
     }
   },
   "DELETE /logout": {
-    "description": "Takes 1 mandatory property of 'user_id' and replaces the refresh token stored against the user with 'null'",
+    "description": "Takes 2 mandatory properties of 'user_id' and 'token', then deletes the refresh token in question if stored against the user",
+    "queries": [],
+    "exampleInput": {
+      "user_id": 1,
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzN9.YkCWMyJ59dmKT7cxwGL9iIDHJK8Rsa5mDZx038tWly8"
+    },
+    "exampleResponse": null
+  },
+  "DELETE /logoutAll": {
+    "description": "Takes 1 mandatory property of 'user_id' and deletes all refresh tokens stored against the user",
     "queries": [],
     "exampleInput": {
       "user_id": 1
