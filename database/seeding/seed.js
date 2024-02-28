@@ -3,7 +3,10 @@ const pokemonData = require("../data/pokemon");
 
 const seed = () => {
   return database
-    .query(`DROP TABLE IF EXISTS leagues_pokemon;`)
+    .query(`DROP EVENT IF EXISTS auto_delete_expired_tokens;`)
+    .then(() => {
+      return database.query(`DROP TABLE IF EXISTS leagues_pokemon;`);
+    })
     .then(() => {
       return database.query(`DROP TABLE IF EXISTS pokemon;`);
     })
@@ -26,6 +29,7 @@ const seed = () => {
           avatar_url VARCHAR(1000) DEFAULT "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
           join_date DATETIME DEFAULT CURRENT_TIMESTAMP,
           token VARCHAR(1000) DEFAULT null,
+          token_expiry DATETIME DEFAULT null,
           PRIMARY KEY (user_id)
           )`);
     })
@@ -123,6 +127,16 @@ const seed = () => {
       const query = `INSERT INTO pokemon (pokemon_name, pokedex_no, speed_stat, type_1, type_2, ability_1, ability_2, ability_3) VALUES ?;`;
 
       return database.query(query, [formattedPokemonData]);
+    })
+    .then(() => {
+      return database.query(`
+        CREATE EVENT auto_delete_expired_tokens
+        ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 HOUR
+        ON COMPLETION PRESERVE
+        DO
+        UPDATE users SET token = null, token_expiry = null
+        WHERE token_expiry < CURRENT_TIMESTAMP;
+      `);
     })
     .catch((err) => console.log(err));
 };

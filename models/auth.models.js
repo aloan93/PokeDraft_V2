@@ -91,9 +91,9 @@ function generateAccessToken(user) {
 
 function storeToken(username, refreshToken) {
   return bcrypt.hash(refreshToken, 10).then((hashedToken) => {
-    return database.query(`UPDATE users SET token = ? WHERE username = ?`, [
-      hashedToken,
-      username,
-    ]);
+    return database.query(
+      `UPDATE users SET token = ?, token_expiry = CURRENT_TIMESTAMP + INTERVAL 1 DAY WHERE username = ?;`,
+      [hashedToken, username]
+    );
   });
 }
