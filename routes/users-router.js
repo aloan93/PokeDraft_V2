@@ -8,14 +8,14 @@ const {
 } = require("../controllers/users.controllers");
 const { authenticateToken } = require("../middleware");
 
-usersRouter.get("/", authenticateToken, getUsers);
+usersRouter.get("/", getUsers);
 
 usersRouter.get("/:user_id", getUserByUserId);
 
 usersRouter.post("/", postUser);
 
-usersRouter.patch("/:user_id", patchUserByUserId);
+usersRouter.patch("/:user_id", authenticateToken, patchUserByUserId);
 
-usersRouter.delete("/:user_id", deleteUserByUserId);
+usersRouter.delete("/:user_id", authenticateToken, deleteUserByUserId);
 
 module.exports = { usersRouter };
