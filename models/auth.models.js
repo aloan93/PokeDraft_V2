@@ -26,7 +26,7 @@ exports.loginModel = (username, password) => {
           message: "Password is incorrect",
         });
       else {
-        const user = { name: username };
+        const user = { name: username, id: user_id };
         const accessToken = generateAccessToken(user);
         const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
           expiresIn: "25h",
@@ -76,7 +76,7 @@ exports.tokenModel = (user_id, token) => {
             status: 403,
             message: "Token generation error",
           });
-        accessToken = generateAccessToken({ name: user.name });
+        accessToken = generateAccessToken({ name: user.name, id: user.id });
       });
 
       return { accessToken };
