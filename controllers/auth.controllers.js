@@ -8,8 +8,8 @@ const {
 exports.loginController = (req, res, next) => {
   const { username, password } = req.body;
   return loginModel(username, password)
-    .then(({ accessToken, refreshToken }) => {
-      res.json({ accessToken, refreshToken });
+    .then(({ accessToken, refreshToken, user }) => {
+      res.status(200).send({ accessToken, refreshToken, user });
     })
     .catch((err) => next(err));
 };
@@ -18,7 +18,7 @@ exports.tokenController = (req, res, next) => {
   const { user_id, token } = req.body;
   return tokenModel(user_id, token)
     .then(({ accessToken }) => {
-      res.json({ accessToken });
+      res.status(200).send({ accessToken });
     })
     .catch((err) => next(err));
 };

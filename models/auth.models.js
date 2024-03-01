@@ -3,6 +3,7 @@ const database = require("../database/connection");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { checkUserExists } = require("./model.utils");
+const { fetchUserByUserId } = require("./users.models");
 const crypto = require("crypto");
 
 exports.loginModel = (username, password) => {
@@ -35,12 +36,13 @@ exports.loginModel = (username, password) => {
         return Promise.all([
           accessToken,
           refreshToken,
+          fetchUserByUserId(user_id),
           storeToken(user_id, refreshToken),
         ]);
       }
     })
-    .then(([accessToken, refreshToken]) => {
-      return { accessToken, refreshToken };
+    .then(([accessToken, refreshToken, user]) => {
+      return { accessToken, refreshToken, user };
     });
 };
 
