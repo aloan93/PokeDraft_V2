@@ -36,10 +36,16 @@ exports.postUser = (req, res, next) => {
 exports.patchUserByUserId = (req, res, next) => {
   const { username, email, password, avatar_url } = req.body;
   const { user_id } = req.params;
+  const auth_id = req.user.id;
 
-  if (Number(user_id) !== req.user.id) res.sendStatus(403);
-
-  return updateUserByUserId(user_id, username, email, password, avatar_url)
+  return updateUserByUserId(
+    auth_id,
+    user_id,
+    username,
+    email,
+    password,
+    avatar_url
+  )
     .then((user) => {
       res.status(200).send({ user });
     })
@@ -48,10 +54,9 @@ exports.patchUserByUserId = (req, res, next) => {
 
 exports.deleteUserByUserId = (req, res, next) => {
   const { user_id } = req.params;
+  const auth_id = req.user.id;
 
-  if (Number(user_id) !== req.user.id) res.sendStatus(403);
-
-  return removeUserByUserId(user_id)
+  return removeUserByUserId(auth_id, user_id)
     .then(() => {
       res.sendStatus(204);
     })

@@ -93,6 +93,7 @@ exports.createUser = (username, email, password) => {
 };
 
 exports.updateUserByUserId = (
+  auth_id,
   user_id,
   username,
   email,
@@ -106,8 +107,17 @@ exports.updateUserByUserId = (
     });
   }
 
+  if (!Number(user_id) || Number(user_id) === 0 || Number(user_id) % 1 !== 0)
+    return Promise.reject({ status: 400, message: "Invalid user id supplied" });
+
   return checkUserExists(user_id)
     .then(() => {
+      if (Number(user_id) !== auth_id)
+        return Promise.reject({
+          status: 403,
+          message: "User id does not match the auth holder",
+        });
+
       if (password) return bcrypt.hash(password, 10);
       else return;
     })
@@ -173,14 +183,23 @@ exports.updateUserByUserId = (
     .then((user) => user);
 };
 
-exports.removeUserByUserId = (user_id) => {
-  const query = database.query(`DELETE FROM users WHERE user_id = ?;`, [
-    user_id,
-  ]);
-  const doesUserExist = checkUserExists(user_id);
-  return Promise.all([query, doesUserExist]).then((results) => {
-    if (results[0][0].affectedRows === 0) {
-      return Promise.reject({ status: 500, message: "Issue deleting user" });
-    } else return;
-  });
+exports.removeUserByUserId = (auth_id, user_id) => {
+  if (!Number(user_id) || Number(user_id) === 0 || Number(user_id) % 1 !== 0)
+    return Promise.reject({ status: 400, message: "Invalid user id supplied" });
+
+  return checkUserExists(user_id)
+    .then(() => {
+      if (Number(user_id) !== auth_id)
+        return Promise.reject({
+          status: 403,
+          message: "User id does not match the auth holder",
+        });
+
+      return database.query(`DELETE FROM users WHERE user_id = ?;`, [user_id]);
+    })
+    .then((results) => {
+      if (results[0].affectedRows === 0)
+        return Promise.reject({ status: 500, message: "Issue deleting user" });
+      else return;
+    });
 };
