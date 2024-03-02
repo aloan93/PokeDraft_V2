@@ -9,7 +9,11 @@ exports.loginController = (req, res, next) => {
   const { username, password } = req.body;
   return loginModel(username, password)
     .then(({ accessToken, refreshToken, user }) => {
-      res.status(200).send({ accessToken, refreshToken, user });
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        maxAge: 25 * 60 * 60 * 1000,
+      });
+      res.status(200).send({ accessToken, user });
     })
     .catch((err) => next(err));
 };
