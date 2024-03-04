@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const PORT = 9001;
 const {
   loginController,
@@ -16,6 +17,8 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+
+app.use(cookieParser());
 
 app.post("/login", loginController);
 

@@ -47,9 +47,6 @@ exports.loginModel = (username, password) => {
 };
 
 exports.tokenModel = (user_id, token) => {
-  if (!token)
-    return Promise.reject({ status: 401, message: "No token supplied" });
-
   if (!user_id)
     return Promise.reject({ status: 400, message: "No user_id supplied" });
 
@@ -86,9 +83,6 @@ exports.tokenModel = (user_id, token) => {
 };
 
 exports.logoutModel = (user_id, token) => {
-  if (!token)
-    return Promise.reject({ status: 401, message: "No token supplied" });
-
   if (!user_id)
     return Promise.reject({ status: 400, message: "No user_id supplied" });
 
