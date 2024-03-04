@@ -26,7 +26,7 @@ exports.tokenController = (req, res, next) => {
   const cookies = req.cookies;
 
   if (!cookies?.jwt)
-    return res.status(401).send({ message: "No cookie/token supplied" });
+    return res.status(403).send({ message: "No cookie/token supplied" });
 
   const token = cookies.jwt;
 

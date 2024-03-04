@@ -48,7 +48,7 @@ exports.loginModel = (username, password) => {
 
 exports.tokenModel = (user_id, token) => {
   if (!user_id)
-    return Promise.reject({ status: 400, message: "No user_id supplied" });
+    return Promise.reject({ status: 403, message: "No user_id supplied" });
 
   const doesUserExist = checkUserExists(user_id);
   const query = database.query(`SELECT token from tokens WHERE user = ?`, [
@@ -58,7 +58,7 @@ exports.tokenModel = (user_id, token) => {
     .then(([result]) => {
       if (result[0].length === 0)
         return Promise.reject({
-          status: 401,
+          status: 403,
           message: "User does not have any valid tokens",
         });
 
@@ -69,16 +69,19 @@ exports.tokenModel = (user_id, token) => {
         return Promise.reject({ status: 403, message: "Invalid token" });
 
       let accessToken;
+      let verificationError = false;
       jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-        if (err)
-          return Promise.reject({
-            status: 403,
-            message: "Token generation error",
-          });
-        accessToken = generateAccessToken({ name: user.name, id: user.id });
+        if (err) verificationError = true;
+        else
+          accessToken = generateAccessToken({ name: user.name, id: user.id });
       });
 
-      return { accessToken };
+      if (verificationError)
+        return Promise.reject({
+          status: 403,
+          message: "Token verification error",
+        });
+      else return { accessToken };
     });
 };
 

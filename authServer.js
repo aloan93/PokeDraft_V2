@@ -8,14 +8,17 @@ const {
   logoutController,
   logoutAllController,
 } = require("./controllers/auth.controllers");
+const { corsOptions } = require("./config/corsOptions");
+const { credentials } = require("./middleware");
 
 const app = express();
 app.use(express.json());
 
-const corsOptions = {
-  origin: ["http://localhost:5173"],
-  credentials: true,
-};
+// handle options credentials check - BEFORE CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
