@@ -6,7 +6,6 @@ const {
   loginController,
   tokenController,
   logoutController,
-  logoutAllController,
 } = require("./controllers/auth.controllers");
 const { corsOptions } = require("./config/corsOptions");
 const { credentials } = require("./middleware");
@@ -28,8 +27,6 @@ app.post("/login", loginController);
 app.post("/token", tokenController);
 
 app.delete("/logout", logoutController);
-
-app.delete("/logoutAll", logoutAllController);
 
 // customer errors
 

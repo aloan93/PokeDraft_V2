@@ -1,39 +1,41 @@
 {
   "POST /login": {
-    "description": "Takes 2 mandatory properties of 'username' and 'password', and serves both an 'accessToken' via the response, and a 'refreshToken' via a cookie so long as the supplied password matchs the user's password",
+    "description": "Takes 2 mandatory properties of 'username' and 'password', and serves an 'accessToken' and 'user' via the response, and a 'refreshToken' via a httpOnly cookie - so long as the supplied password matchs the user's password",
     "queries": [],
     "exampleInput": {
       "username": "testuser1",
       "password": "securepassword"
     },
     "exampleResponse": {
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzMsImV4cCI6MTcwOTA2NTU5M30.YJYbOivlwWqWI_A0AipjrFGygsEgG30qUUY1yYd_Q0k"
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzMsImV4cCI6MTcwOTA2NTU5M30.YJYbOivlwWqWI_A0AipjrFGygsEgG30qUUY1yYd_Q0k",
+      "user": {
+        "user_id": 1,
+        "username": "testuser1",
+        "email": "test1@test.com",
+        "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
+        "join_date": "2024-03-01T17:56:53.000Z"
+      }
     }
   },
   "POST /token": {
-    "description": "Takes 1 mandatory property of 'user_id'. Serves up a new 'accessToken' for the user (indicated via the 'user_id') so long as the supplied cookie token matches the refresh token associated to the user",
+    "description": "Serves up the 'user' and a new 'accessToken' so long as the supplied cookie token matches an entry in the database",
     "queries": [],
-    "exampleInput": {
-      "user_id": 1
-    },
+    "exampleInput": null,
     "exampleResponse": {
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzMsImV4cCI6MTcwOTA2NTU5M30.YJYbOivlwWqWI_A0AipjrFGygsEgG30qUU1newtoken"
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE3MDkwNjU1NzMsImV4cCI6MTcwOTA2NTU5M30.YJYbOivlwWqWI_A0AipjrFGygsEgG30qUU1newtoken",
+      "user": {
+        "user_id": 1,
+        "username": "testuser1",
+        "email": "test1@test.com",
+        "avatar_url": "https://cdn.pixabay.com/photo/2018/11/13/22/01/avatar-3814081_1280.png",
+        "join_date": "2024-03-01T17:56:53.000Z"
+      }
     }
   },
   "DELETE /logout": {
-    "description": "Takes 1 mandatory property of 'user_id', then deletes the refresh token cookie and/or database hashed token if present",
+    "description": "Deletes the refresh token cookie and/or database hashed token if present",
     "queries": [],
-    "exampleInput": {
-      "user_id": 1
-    },
-    "exampleResponse": null
-  },
-  "DELETE /logoutAll": {
-    "description": "Takes 1 mandatory property of 'user_id' and deletes the refresh token cookie and/or all database hashed tokens if present",
-    "queries": [],
-    "exampleInput": {
-      "user_id": 1
-    },
+    "exampleInput": null,
     "exampleResponse": null
   },
   "GET /api": {
