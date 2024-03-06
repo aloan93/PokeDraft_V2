@@ -1,5 +1,6 @@
 require("dotenv").config({ path: `${__dirname}/.env` });
 const jwt = require("jsonwebtoken");
+const { allowedOrigins } = require("./config/allowOrigins");
 
 exports.authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -12,4 +13,12 @@ exports.authenticateToken = (req, res, next) => {
     req.user = user;
     next();
   });
+};
+
+exports.credentials = (req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Credentials", true);
+  }
+  next();
 };

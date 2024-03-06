@@ -1,12 +1,19 @@
 const express = require("express");
 const cors = require("cors");
 const { apiRouter } = require("./routes/api-router");
+const { corsOptions } = require("./config/corsOptions");
+const { credentials } = require("./middleware");
 const PORT = 9000;
 
 const app = express();
 app.use(express.json());
 
-app.use(cors());
+// handle options credentials check - BEFORE CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions));
 
 app.use("/api", apiRouter);
 

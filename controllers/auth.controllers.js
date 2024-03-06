@@ -2,41 +2,54 @@ const {
   loginModel,
   tokenModel,
   logoutModel,
-  logoutAllModel,
 } = require("../models/auth.models");
 
 exports.loginController = (req, res, next) => {
   const { username, password } = req.body;
+
   return loginModel(username, password)
-    .then(({ accessToken, refreshToken }) => {
-      res.json({ accessToken, refreshToken });
+    .then(({ accessToken, refreshToken, user }) => {
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        // sameSite: "none",
+        // secure: true,
+        maxAge: 25 * 60 * 60 * 1000,
+      });
+      res.status(200).send({ accessToken, user });
     })
     .catch((err) => next(err));
 };
 
 exports.tokenController = (req, res, next) => {
-  const { user_id, token } = req.body;
-  return tokenModel(user_id, token)
-    .then(({ accessToken }) => {
-      res.json({ accessToken });
+  const cookies = req.cookies;
+
+  if (!cookies?.jwt)
+    return res.status(401).send({ message: "No cookie/token supplied" });
+
+  const token = cookies.jwt;
+
+  return tokenModel(token)
+    .then(({ accessToken, user }) => {
+      res.status(200).send({ accessToken, user });
     })
     .catch((err) => next(err));
 };
 
 exports.logoutController = (req, res, next) => {
-  const { user_id, token } = req.body;
-  return logoutModel(user_id, token)
-    .then(() => {
-      res.sendStatus(204);
-    })
-    .catch((err) => next(err));
-};
+  const cookies = req.cookies;
 
-exports.logoutAllController = (req, res, next) => {
-  const { user_id } = req.body;
-  return logoutAllModel(user_id)
+  if (!cookies?.jwt) return res.sendStatus(204);
+
+  const token = cookies.jwt;
+
+  return logoutModel(token)
     .then(() => {
-      res.sendStatus(204);
+      res.clearCookie("jwt", {
+        httpOnly: true,
+        // sameSite: "none",
+        // secure: true,
+      });
+      return res.sendStatus(204);
     })
     .catch((err) => next(err));
 };
