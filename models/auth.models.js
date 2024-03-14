@@ -14,10 +14,10 @@ exports.loginModel = (username, password) => {
       if (result[0].length === 0)
         return Promise.reject({ status: 404, message: "User not found" });
 
-      return [
+      return Promise.all([
         bcrypt.compare(password, result[0][0].password),
         result[0][0].user_id,
-      ];
+      ]);
     })
     .then(([isMatch, user_id]) => {
       if (!isMatch)
