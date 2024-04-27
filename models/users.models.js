@@ -30,8 +30,8 @@ exports.fetchUsers = (
 
   const queryValues = [];
   if (username) {
-    queryValues.push(username);
-    query += `WHERE username = ? `;
+    queryValues.push("%" + username + "%");
+    query += `WHERE username LIKE ? `;
   }
 
   query += `ORDER BY ${validSortBys[sort_by]} ${order} `;
