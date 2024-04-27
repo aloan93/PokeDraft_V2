@@ -5,6 +5,7 @@ exports.fetchPokemon = (
   sort_by = "pokedex_no",
   order = "desc",
   pokedex_no,
+  pokemon_name,
   type,
   type2,
   ability,
@@ -65,6 +66,12 @@ exports.fetchPokemon = (
     if (count === 0)
       query += `WHERE (ability_1 = ? OR ability_2 = ? OR ability_3 = ?) `;
     else query += `AND (ability_1 = ? OR ability_2 = ? OR ability_3 = ?) `;
+  }
+
+  if (pokemon_name) {
+    queryValues.push("%" + pokemon_name + "%");
+    if (count === 0) query += `WHERE pokemon_name LIKE ? `;
+    else query += `AND pokemon_name LIKE ? `;
   }
 
   query += `ORDER BY ${validSortBys[sort_by]} ${order}${
