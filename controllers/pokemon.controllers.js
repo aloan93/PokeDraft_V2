@@ -4,12 +4,22 @@ const {
 } = require("../models/pokemon.models");
 
 exports.getPokemon = (req, res, next) => {
-  const { sort_by, order, pokedex_no, type, type2, ability, limit, page } =
-    req.query;
+  const {
+    sort_by,
+    order,
+    pokedex_no,
+    pokemon_name,
+    type,
+    type2,
+    ability,
+    limit,
+    page,
+  } = req.query;
   return fetchPokemon(
     sort_by,
     order,
     pokedex_no,
+    pokemon_name,
     type,
     type2,
     ability,
